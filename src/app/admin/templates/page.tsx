@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { FileText, Edit2, Plus, Trash2 } from "lucide-react";
 import { createTemplate, updateTemplate, deleteTemplate, TemplateWithRelations } from "@/lib/api/templates";
@@ -168,117 +169,128 @@ export default function TemplatesPage() {
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800">
-              <Plus className="mr-2 h-4 w-4" /> Tambah Template
-            </Button>
+          <DialogTrigger
+            render={
+              <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800" />
+            }
+          >
+            <Plus className="mr-2 h-4 w-4" /> Tambah Template
           </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingId ? "Edit Template Observasi" : "Tambah Template Observasi"}</DialogTitle>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
+            <DialogHeader className="p-6 pb-4 border-b bg-gray-50/50">
+              <DialogTitle className="text-xl">{editingId ? "Edit Template Observasi" : "Tambah Template Observasi"}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-6 pt-4">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col min-h-[50vh]">
+              <Tabs defaultValue="parameter" className="w-full flex-1 flex flex-col">
+                <div className="px-6 pt-4">
+                  <TabsList className="grid w-full grid-cols-3 mb-4">
+                    <TabsTrigger value="parameter">Parameter</TabsTrigger>
+                    <TabsTrigger value="area">Pemeriksaan Area</TabsTrigger>
+                    <TabsTrigger value="jsa">JSA</TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto px-6 pb-6">
+                  {/* TAB 1: Parameters */}
+                  <TabsContent value="parameter" className="space-y-6 mt-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold">Type Pekerjaan</label>
+                        <Select value={selectedType} onValueChange={setSelectedType} disabled={!!editingId}>
+                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedType ? typePekerjaan.find(t => t.id === selectedType)?.nama : "Pilih type"}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            {typePekerjaan.map(t => <SelectItem key={t.id} value={t.id}>{t.nama}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold">Jenis Unit</label>
+                        <Select value={selectedUnit} onValueChange={setSelectedUnit} disabled={!!editingId}>
+                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedUnit ? jenisUnit.find(u => u.id === selectedUnit)?.nama : "Pilih unit"}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            {jenisUnit.map(u => <SelectItem key={u.id} value={u.id}>{u.nama}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold">Cuaca</label>
+                        <Select value={selectedCuaca} onValueChange={setSelectedCuaca} disabled={!!editingId}>
+                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedCuaca ? (() => { const c = cuaca.find(c => c.id === selectedCuaca); return c ? `${c.icon} ${c.nama}` : "Pilih cuaca" })() : "Pilih cuaca"}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            {cuaca.map(c => <SelectItem key={c.id} value={c.id}>{c.icon} {c.nama}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold">Kondisi</label>
+                        <Select value={selectedKondisi} onValueChange={setSelectedKondisi} disabled={!!editingId}>
+                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedKondisi ? kondisi.find(k => k.id === selectedKondisi)?.nama : "Pilih kondisi"}</SelectValue></SelectTrigger>
+                          <SelectContent>
+                            {kondisi.map(k => <SelectItem key={k.id} value={k.id}>{k.nama}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  {/* TAB 2: Pemeriksaan Area */}
+                  <TabsContent value="area" className="space-y-5 mt-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Hasil pemeriksaan area</label>
+                        <Textarea className="resize-none h-20" value={hArea} onChange={e => setHArea(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Rekomendasi area</label>
+                        <Textarea className="resize-none h-20" value={rArea} onChange={e => setRArea(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Hasil pemeriksaan area 360</label>
+                        <Textarea className="resize-none h-20" value={hArea360} onChange={e => setHArea360(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Rekomendasi area 360</label>
+                        <Textarea className="resize-none h-20" value={rArea360} onChange={e => setRArea360(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Hasil energi berbahaya</label>
+                        <Textarea className="resize-none h-20" value={hEnergi} onChange={e => setHEnergi(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Rekomendasi energi berbahaya</label>
+                        <Textarea className="resize-none h-20" value={rEnergi} onChange={e => setREnergi(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Hasil penanggung jawab</label>
+                        <Textarea className="resize-none h-20" value={hPj} onChange={e => setHPj(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Rekomendasi penanggung jawab</label>
+                        <Textarea className="resize-none h-20" value={rPj} onChange={e => setRPj(e.target.value)} />
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  {/* TAB 3: JSA */}
+                  <TabsContent value="jsa" className="space-y-5 mt-0">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Urutan langkah kerja</label>
+                      <Textarea className="resize-none h-24" value={langkah} onChange={e => setLangkah(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Potensi bahaya/resiko</label>
+                      <Textarea className="resize-none h-24" value={bahaya} onChange={e => setBahaya(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Kontrol resiko</label>
+                      <Textarea className="resize-none h-24" value={kontrol} onChange={e => setKontrol(e.target.value)} />
+                    </div>
+                  </TabsContent>
+                </div>
+              </Tabs>
               
-              {/* Parameters */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-lg border">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Type Pekerjaan</label>
-                  <Select value={selectedType} onValueChange={setSelectedType} disabled={!!editingId}>
-                    <SelectTrigger><SelectValue placeholder="Pilih type" /></SelectTrigger>
-                    <SelectContent>
-                      {typePekerjaan.map(t => <SelectItem key={t.id} value={t.id}>{t.nama}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Jenis Unit</label>
-                  <Select value={selectedUnit} onValueChange={setSelectedUnit} disabled={!!editingId}>
-                    <SelectTrigger><SelectValue placeholder="Pilih unit" /></SelectTrigger>
-                    <SelectContent>
-                      {jenisUnit.map(u => <SelectItem key={u.id} value={u.id}>{u.nama}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Cuaca</label>
-                  <Select value={selectedCuaca} onValueChange={setSelectedCuaca} disabled={!!editingId}>
-                    <SelectTrigger><SelectValue placeholder="Pilih cuaca" /></SelectTrigger>
-                    <SelectContent>
-                      {cuaca.map(c => <SelectItem key={c.id} value={c.id}>{c.icon} {c.nama}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Kondisi</label>
-                  <Select value={selectedKondisi} onValueChange={setSelectedKondisi} disabled={!!editingId}>
-                    <SelectTrigger><SelectValue placeholder="Pilih kondisi" /></SelectTrigger>
-                    <SelectContent>
-                      {kondisi.map(k => <SelectItem key={k.id} value={k.id}>{k.nama}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Pemeriksaan Area Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-teal-800 border-b pb-2">Pemeriksaan Area</h3>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Hasil pemeriksaan area</label>
-                    <Textarea value={hArea} onChange={e => setHArea(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Rekomendasi area</label>
-                    <Textarea value={rArea} onChange={e => setRArea(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Hasil pemeriksaan area 360</label>
-                    <Textarea value={hArea360} onChange={e => setHArea360(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Rekomendasi area 360</label>
-                    <Textarea value={rArea360} onChange={e => setRArea360(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Hasil energi berbahaya</label>
-                    <Textarea value={hEnergi} onChange={e => setHEnergi(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Rekomendasi energi berbahaya</label>
-                    <Textarea value={rEnergi} onChange={e => setREnergi(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Hasil penanggung jawab</label>
-                    <Textarea value={hPj} onChange={e => setHPj(e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Rekomendasi penanggung jawab</label>
-                    <Textarea value={rPj} onChange={e => setRPj(e.target.value)} rows={2} />
-                  </div>
-                </div>
-
-                {/* JSA Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-teal-800 border-b pb-2">Job Safety Analysis (JSA)</h3>
-                  
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Urutan langkah kerja</label>
-                    <Textarea value={langkah} onChange={e => setLangkah(e.target.value)} rows={4} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Potensi bahaya/resiko</label>
-                    <Textarea value={bahaya} onChange={e => setBahaya(e.target.value)} rows={4} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Kontrol resiko</label>
-                    <Textarea value={kontrol} onChange={e => setKontrol(e.target.value)} rows={4} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-4 border-t">
-                <Button type="submit" className="w-full md:w-auto bg-teal-700 hover:bg-teal-800" disabled={isSubmitting}>
+              <div className="p-6 pt-4 border-t bg-gray-50/50 mt-auto">
+                <Button type="submit" className="w-full bg-teal-700 hover:bg-teal-800 font-semibold h-11" disabled={isSubmitting}>
                   {isSubmitting ? "Menyimpan..." : "Simpan Template"}
                 </Button>
               </div>

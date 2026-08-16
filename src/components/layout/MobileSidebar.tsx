@@ -11,11 +11,11 @@ export function MobileSidebar() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden text-white hover:text-teal-100 hover:bg-teal-800 mr-2 -ml-2">
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
+      <SheetTrigger 
+        render={<Button variant="ghost" size="icon" className="md:hidden text-white hover:text-teal-100 hover:bg-teal-800 mr-2 -ml-2" />}
+      >
+        <Menu className="h-6 w-6" />
+        <span className="sr-only">Toggle Menu</span>
       </SheetTrigger>
       <SheetContent side="left" className="w-72 p-0 flex flex-col bg-white">
         <SheetHeader className="p-4 border-b flex items-start text-left">

@@ -26,8 +26,8 @@ export const useTypePekerjaanStore = create<MasterDataStore<TypePekerjaan>>()(
         try {
           const freshData = await getTypePekerjaan();
           set({ data: freshData || [], lastSynced: Date.now(), isSyncing: false });
-        } catch (error) {
-          console.error("Failed to sync TypePekerjaan:", error);
+        } catch (error: any) {
+          console.error("Failed to sync TypePekerjaan:", error?.message || error);
           set({ isSyncing: false });
         }
       },
@@ -50,8 +50,8 @@ export const useJenisUnitStore = create<MasterDataStore<JenisUnit>>()(
         try {
           const freshData = await getJenisUnit();
           set({ data: freshData || [], lastSynced: Date.now(), isSyncing: false });
-        } catch (error) {
-          console.error("Failed to sync JenisUnit:", error);
+        } catch (error: any) {
+          console.error("Failed to sync JenisUnit:", error?.message || error);
           set({ isSyncing: false });
         }
       },
@@ -74,8 +74,8 @@ export const useCuacaStore = create<MasterDataStore<Cuaca>>()(
         try {
           const freshData = await getCuaca();
           set({ data: freshData || [], lastSynced: Date.now(), isSyncing: false });
-        } catch (error) {
-          console.error("Failed to sync Cuaca:", error);
+        } catch (error: any) {
+          console.error("Failed to sync Cuaca:", error?.message || error);
           set({ isSyncing: false });
         }
       },
@@ -98,8 +98,8 @@ export const useKondisiStore = create<MasterDataStore<Kondisi>>()(
         try {
           const freshData = await getKondisi();
           set({ data: freshData || [], lastSynced: Date.now(), isSyncing: false });
-        } catch (error) {
-          console.error("Failed to sync Kondisi:", error);
+        } catch (error: any) {
+          console.error("Failed to sync Kondisi:", error?.message || error);
           set({ isSyncing: false });
         }
       },
@@ -122,8 +122,8 @@ export const useTemplateStore = create<MasterDataStore<TemplateWithRelations>>()
         try {
           const freshData = await getTemplates();
           set({ data: freshData || [], lastSynced: Date.now(), isSyncing: false });
-        } catch (error) {
-          console.error("Failed to sync Templates:", error);
+        } catch (error: any) {
+          console.error("Failed to sync Templates:", error?.message || error);
           set({ isSyncing: false });
         }
       },

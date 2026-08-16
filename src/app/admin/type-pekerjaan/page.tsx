@@ -57,9 +57,9 @@ export default function TypePekerjaanPage() {
       }
       setIsDialogOpen(false);
       sync();
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Terjadi kesalahan");
-      console.error(error);
+      console.error(error?.message || error);
     } finally {
       setIsSubmitting(false);
     }
@@ -87,10 +87,12 @@ export default function TypePekerjaanPage() {
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800">
-              <Plus className="mr-2 h-4 w-4" /> Tambah Type
-            </Button>
+          <DialogTrigger
+            render={
+              <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800" />
+            }
+          >
+            <Plus className="mr-2 h-4 w-4" /> Tambah Type
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
