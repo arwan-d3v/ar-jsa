@@ -1,0 +1,52 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Copy, Check } from "lucide-react";
+import { toast } from "sonner";
+
+interface CopyableFieldProps {
+  label: string;
+  value: string;
+}
+
+export function CopyableField({ label, value }: CopyableFieldProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (!value) {
+      toast("Tidak ada data untuk dicopy");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      toast.success(`${label} disalin ke clipboard`);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast.error("Gagal menyalin text");
+      console.error(err);
+    }
+  };
+
+  return (
+    <div className="space-y-1.5 p-3 rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-teal-900">{label}</label>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 px-2 text-gray-500 hover:text-teal-700 hover:bg-teal-50"
+          onClick={handleCopy}
+          title={`Copy ${label}`}
+        >
+          {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+          <span className="sr-only">Copy</span>
+        </Button>
+      </div>
+      <div className="text-sm text-gray-700 whitespace-pre-wrap min-h-[1.25rem]">
+        {value || <span className="text-gray-400 italic">Data kosong</span>}
+      </div>
+    </div>
+  );
+}
