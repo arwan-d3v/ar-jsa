@@ -91,11 +91,11 @@ export default function KondisiPage() {
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger render={
             <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800">
               <Plus className="mr-2 h-4 w-4" /> Tambah Kondisi
             </Button>
-          </DialogTrigger>
+          } />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>{editingId ? "Edit Kondisi" : "Tambah Kondisi"}</DialogTitle>
@@ -111,7 +111,7 @@ export default function KondisiPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Severity (0=Normal, 1=Warning, 2=Danger)</label>
-                <Select value={severity} onValueChange={setSeverity}>
+                <Select value={severity} onValueChange={(val) => setSeverity(val || "0")}>
                   <SelectTrigger>
                     <SelectValue placeholder="Pilih severity" />
                   </SelectTrigger>

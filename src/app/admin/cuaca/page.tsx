@@ -87,11 +87,11 @@ export default function CuacaPage() {
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger render={
             <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800">
               <Plus className="mr-2 h-4 w-4" /> Tambah Cuaca
             </Button>
-          </DialogTrigger>
+          } />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>{editingId ? "Edit Cuaca" : "Tambah Cuaca"}</DialogTitle>
