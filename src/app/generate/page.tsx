@@ -7,18 +7,21 @@ import { Button } from "@/components/ui/button";
 import { GeneratedSection } from "@/components/generate/GeneratedSection";
 import { ClipboardCheck, BarChart2, Rocket } from "lucide-react";
 import { toast } from "sonner";
-import { getTypePekerjaan, TypePekerjaan } from "@/lib/api/type-pekerjaan";
-import { getJenisUnit, JenisUnit } from "@/lib/api/jenis-unit";
-import { getCuaca, Cuaca } from "@/lib/api/cuaca";
-import { getKondisi, Kondisi } from "@/lib/api/kondisi";
-import { getTemplateByParams, TemplateObservasi } from "@/lib/api/templates";
+import { useTypePekerjaanStore, useJenisUnitStore, useCuacaStore, useKondisiStore, useTemplateStore } from "@/lib/store";
+import { TemplateWithRelations } from "@/lib/api/templates";
 
 export default function GeneratePage() {
-  // Options
-  const [typePekerjaan, setTypePekerjaan] = useState<TypePekerjaan[]>([]);
-  const [jenisUnit, setJenisUnit] = useState<JenisUnit[]>([]);
-  const [cuaca, setCuaca] = useState<Cuaca[]>([]);
-  const [kondisi, setKondisi] = useState<Kondisi[]>([]);
+  // Zustand Stores (Local Cache)
+  const { data: typePekerjaanRaw, sync: syncTypePekerjaan } = useTypePekerjaanStore();
+  const { data: jenisUnitRaw, sync: syncJenisUnit } = useJenisUnitStore();
+  const { data: cuacaRaw, sync: syncCuaca } = useCuacaStore();
+  const { data: kondisiRaw, sync: syncKondisi } = useKondisiStore();
+  const { data: templates, sync: syncTemplates } = useTemplateStore();
+
+  const typePekerjaan = typePekerjaanRaw.filter(t => t.is_active);
+  const jenisUnit = jenisUnitRaw.filter(u => u.is_active);
+  const cuaca = cuacaRaw.filter(c => c.is_active);
+  const kondisi = kondisiRaw.filter(k => k.is_active);
 
   // Selected Params
   const [selectedType, setSelectedType] = useState("");
@@ -27,29 +30,17 @@ export default function GeneratePage() {
   const [selectedKondisi, setSelectedKondisi] = useState("");
 
   // Result
-  const [generatedData, setGeneratedData] = useState<TemplateObservasi | null>(null);
+  const [generatedData, setGeneratedData] = useState<TemplateWithRelations | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Background Sync on Mount
   useEffect(() => {
-    async function fetchOptions() {
-      try {
-        const [types, units, weathers, conds] = await Promise.all([
-          getTypePekerjaan(),
-          getJenisUnit(),
-          getCuaca(),
-          getKondisi(),
-        ]);
-        setTypePekerjaan(types?.filter(t => t.is_active) || []);
-        setJenisUnit(units?.filter(u => u.is_active) || []);
-        setCuaca(weathers?.filter(c => c.is_active) || []);
-        setKondisi(conds?.filter(k => k.is_active) || []);
-      } catch (error) {
-        console.error(error);
-        toast.error("Gagal memuat master data");
-      }
-    }
-    fetchOptions();
-  }, []);
+    syncTypePekerjaan();
+    syncJenisUnit();
+    syncCuaca();
+    syncKondisi();
+    syncTemplates();
+  }, [syncTypePekerjaan, syncJenisUnit, syncCuaca, syncKondisi, syncTemplates]);
 
   async function handleGenerate() {
     if (!selectedType || !selectedUnit || !selectedCuaca || !selectedKondisi) {
@@ -59,11 +50,21 @@ export default function GeneratePage() {
 
     setIsGenerating(true);
     setGeneratedData(null); // Reset
-    try {
-      const result = await getTemplateByParams(selectedType, selectedUnit, selectedCuaca, selectedKondisi);
+    
+    // Instead of fetching from DB, we filter from the offline-first templates store
+    // This allows instant generation even when offline
+    setTimeout(() => {
+      const result = templates.find(t => 
+        t.type_pekerjaan_id === selectedType &&
+        t.jenis_unit_id === selectedUnit &&
+        t.cuaca_id === selectedCuaca &&
+        t.kondisi_id === selectedKondisi &&
+        t.is_active
+      );
+
       if (result) {
         setGeneratedData(result);
-        toast.success("Berhasil meng-generate data!");
+        toast.success("Berhasil meng-generate data dari cache!");
       } else {
         toast("Template tidak ditemukan", {
           description: "Admin belum membuat template untuk kombinasi parameter ini.",
@@ -73,12 +74,8 @@ export default function GeneratePage() {
           },
         });
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("Terjadi kesalahan saat generate data");
-    } finally {
       setIsGenerating(false);
-    }
+    }, 300); // tiny delay for visual feedback
   }
 
   const pemeriksaanAreaFields = generatedData ? [

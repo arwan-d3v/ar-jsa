@@ -9,21 +9,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { FileText, Edit2, Plus, Trash2 } from "lucide-react";
-import { getTemplates, createTemplate, updateTemplate, deleteTemplate, TemplateWithRelations } from "@/lib/api/templates";
-import { getTypePekerjaan, TypePekerjaan } from "@/lib/api/type-pekerjaan";
-import { getJenisUnit, JenisUnit } from "@/lib/api/jenis-unit";
-import { getCuaca, Cuaca } from "@/lib/api/cuaca";
-import { getKondisi, Kondisi } from "@/lib/api/kondisi";
+import { createTemplate, updateTemplate, deleteTemplate, TemplateWithRelations } from "@/lib/api/templates";
+import { useTemplateStore, useTypePekerjaanStore, useJenisUnitStore, useCuacaStore, useKondisiStore } from "@/lib/store";
 
 export default function TemplatesPage() {
-  const [data, setData] = useState<TemplateWithRelations[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, sync, isSyncing } = useTemplateStore();
   
   // Options
-  const [typePekerjaan, setTypePekerjaan] = useState<TypePekerjaan[]>([]);
-  const [jenisUnit, setJenisUnit] = useState<JenisUnit[]>([]);
-  const [cuaca, setCuaca] = useState<Cuaca[]>([]);
-  const [kondisi, setKondisi] = useState<Kondisi[]>([]);
+  const { data: typePekerjaanRaw, sync: syncTypePekerjaan } = useTypePekerjaanStore();
+  const { data: jenisUnitRaw, sync: syncJenisUnit } = useJenisUnitStore();
+  const { data: cuacaRaw, sync: syncCuaca } = useCuacaStore();
+  const { data: kondisiRaw, sync: syncKondisi } = useKondisiStore();
+
+  const typePekerjaan = typePekerjaanRaw.filter(t => t.is_active);
+  const jenisUnit = jenisUnitRaw.filter(u => u.is_active);
+  const cuaca = cuacaRaw.filter(c => c.is_active);
+  const kondisi = kondisiRaw.filter(k => k.is_active);
 
   // Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -52,39 +53,12 @@ export default function TemplatesPage() {
   const [kontrol, setKontrol] = useState("");
 
   useEffect(() => {
-    fetchData();
-    fetchOptions();
-  }, []);
-
-  async function fetchOptions() {
-    try {
-      const [types, units, weathers, conds] = await Promise.all([
-        getTypePekerjaan(),
-        getJenisUnit(),
-        getCuaca(),
-        getKondisi(),
-      ]);
-      setTypePekerjaan(types?.filter(t => t.is_active) || []);
-      setJenisUnit(units?.filter(u => u.is_active) || []);
-      setCuaca(weathers?.filter(c => c.is_active) || []);
-      setKondisi(conds?.filter(k => k.is_active) || []);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const result = await getTemplates();
-      setData(result || []);
-    } catch (error) {
-      toast.error("Gagal memuat data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    sync();
+    syncTypePekerjaan();
+    syncJenisUnit();
+    syncCuaca();
+    syncKondisi();
+  }, [sync, syncTypePekerjaan, syncJenisUnit, syncCuaca, syncKondisi]);
 
   function handleEdit(item: TemplateWithRelations) {
     setEditingId(item.id);
@@ -159,7 +133,7 @@ export default function TemplatesPage() {
         toast.success("Template berhasil ditambahkan");
       }
       setIsDialogOpen(false);
-      fetchData();
+      sync();
     } catch (error: any) {
       if (error.code === '23505') {
         toast.error("Template untuk kombinasi ini sudah ada!");
@@ -178,7 +152,7 @@ export default function TemplatesPage() {
     try {
       await deleteTemplate(id);
       toast.success("Template berhasil dihapus");
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Gagal menghapus template");
       console.error(error);
@@ -326,7 +300,7 @@ export default function TemplatesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isSyncing && data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                   Memuat data...

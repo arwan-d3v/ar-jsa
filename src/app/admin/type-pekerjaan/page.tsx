@@ -8,11 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Briefcase, Edit2, Plus, Trash2 } from "lucide-react";
-import { getTypePekerjaan, createTypePekerjaan, updateTypePekerjaan, deleteTypePekerjaan, TypePekerjaan } from "@/lib/api/type-pekerjaan";
+import { createTypePekerjaan, updateTypePekerjaan, deleteTypePekerjaan, TypePekerjaan } from "@/lib/api/type-pekerjaan";
+import { useTypePekerjaanStore } from "@/lib/store";
 
 export default function TypePekerjaanPage() {
-  const [data, setData] = useState<TypePekerjaan[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, sync, isSyncing } = useTypePekerjaanStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
@@ -22,21 +22,8 @@ export default function TypePekerjaanPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const result = await getTypePekerjaan();
-      setData(result || []);
-    } catch (error) {
-      toast.error("Gagal memuat data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    sync();
+  }, [sync]);
 
   function handleEdit(item: TypePekerjaan) {
     setEditingId(item.id);
@@ -69,7 +56,7 @@ export default function TypePekerjaanPage() {
         toast.success("Data berhasil ditambahkan");
       }
       setIsDialogOpen(false);
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Terjadi kesalahan");
       console.error(error);
@@ -84,7 +71,7 @@ export default function TypePekerjaanPage() {
     try {
       await deleteTypePekerjaan(id);
       toast.success("Data berhasil dihapus");
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Gagal menghapus data");
       console.error(error);
@@ -145,7 +132,7 @@ export default function TypePekerjaanPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isSyncing && data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                   Memuat data...

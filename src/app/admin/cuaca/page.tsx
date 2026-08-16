@@ -8,11 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Cloud, Edit2, Plus, Trash2 } from "lucide-react";
-import { getCuaca, createCuaca, updateCuaca, deleteCuaca, Cuaca } from "@/lib/api/cuaca";
+import { createCuaca, updateCuaca, deleteCuaca, Cuaca } from "@/lib/api/cuaca";
+import { useCuacaStore } from "@/lib/store";
 
 export default function CuacaPage() {
-  const [data, setData] = useState<Cuaca[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, sync, isSyncing } = useCuacaStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
@@ -22,21 +22,8 @@ export default function CuacaPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const result = await getCuaca();
-      setData(result || []);
-    } catch (error) {
-      toast.error("Gagal memuat data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    sync();
+  }, [sync]);
 
   function handleEdit(item: Cuaca) {
     setEditingId(item.id);
@@ -69,7 +56,7 @@ export default function CuacaPage() {
         toast.success("Data berhasil ditambahkan");
       }
       setIsDialogOpen(false);
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Terjadi kesalahan");
       console.error(error);
@@ -84,7 +71,7 @@ export default function CuacaPage() {
     try {
       await deleteCuaca(id);
       toast.success("Data berhasil dihapus");
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Gagal menghapus data");
       console.error(error);
@@ -145,7 +132,7 @@ export default function CuacaPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isSyncing && data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                   Memuat data...

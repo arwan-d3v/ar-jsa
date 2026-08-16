@@ -8,11 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Car, Edit2, Plus, Trash2 } from "lucide-react";
-import { getJenisUnit, createJenisUnit, updateJenisUnit, deleteJenisUnit, JenisUnit } from "@/lib/api/jenis-unit";
+import { createJenisUnit, updateJenisUnit, deleteJenisUnit, JenisUnit } from "@/lib/api/jenis-unit";
+import { useJenisUnitStore } from "@/lib/store";
 
 export default function JenisUnitPage() {
-  const [data, setData] = useState<JenisUnit[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, sync, isSyncing } = useJenisUnitStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
@@ -22,21 +22,8 @@ export default function JenisUnitPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const result = await getJenisUnit();
-      setData(result || []);
-    } catch (error) {
-      toast.error("Gagal memuat data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    sync();
+  }, [sync]);
 
   function handleEdit(item: JenisUnit) {
     setEditingId(item.id);
@@ -69,7 +56,7 @@ export default function JenisUnitPage() {
         toast.success("Data berhasil ditambahkan");
       }
       setIsDialogOpen(false);
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Terjadi kesalahan");
       console.error(error);
@@ -84,7 +71,7 @@ export default function JenisUnitPage() {
     try {
       await deleteJenisUnit(id);
       toast.success("Data berhasil dihapus");
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Gagal menghapus data");
       console.error(error);
@@ -145,7 +132,7 @@ export default function JenisUnitPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isSyncing && data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                   Memuat data...

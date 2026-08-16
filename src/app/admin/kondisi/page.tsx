@@ -9,11 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { AlertTriangle, Edit2, Plus, Trash2 } from "lucide-react";
-import { getKondisi, createKondisi, updateKondisi, deleteKondisi, Kondisi } from "@/lib/api/kondisi";
+import { createKondisi, updateKondisi, deleteKondisi, Kondisi } from "@/lib/api/kondisi";
+import { useKondisiStore } from "@/lib/store";
 
 export default function KondisiPage() {
-  const [data, setData] = useState<Kondisi[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, sync, isSyncing } = useKondisiStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
@@ -24,21 +24,8 @@ export default function KondisiPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const result = await getKondisi();
-      setData(result || []);
-    } catch (error) {
-      toast.error("Gagal memuat data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    sync();
+  }, [sync]);
 
   function handleEdit(item: Kondisi) {
     setEditingId(item.id);
@@ -73,7 +60,7 @@ export default function KondisiPage() {
         toast.success("Data berhasil ditambahkan");
       }
       setIsDialogOpen(false);
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Terjadi kesalahan");
       console.error(error);
@@ -88,7 +75,7 @@ export default function KondisiPage() {
     try {
       await deleteKondisi(id);
       toast.success("Data berhasil dihapus");
-      fetchData();
+      sync();
     } catch (error) {
       toast.error("Gagal menghapus data");
       console.error(error);
@@ -172,7 +159,7 @@ export default function KondisiPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isSyncing && data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                   Memuat data...
