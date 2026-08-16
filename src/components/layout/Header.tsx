@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Shield } from "lucide-react";
+import { MobileSidebar } from "./MobileSidebar";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-teal-700 text-white shadow-sm">
       <div className="flex h-16 items-center px-4 md:px-6">
+        <MobileSidebar />
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <Shield className="h-6 w-6" />
           <span>JSA OBSERVASI</span>
