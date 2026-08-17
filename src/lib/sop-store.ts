@@ -111,14 +111,62 @@ const defaultSopTemplateHaulTruck: SopTemplate = {
 - Hindari sisi tajam cutter dan perhatikan titik jepit saat crimping connector.
 - Selalu patuhi prosedur LOTO (Lock Out Tag Out) sebelum memulai intervensi elektrik.
 - Wajib menggunakan APD standar (seragam, sepatu safety, helmet, kacamata).`,
+  updatedAt: new Date().toISOString(),
+};
+
+const defaultSopTemplateDispatchElectric: SopTemplate = {
+  id: "default-3",
+  typePekerjaan: "Perbaikan Dispatch type PTX",
+  jenisUnit: "Electric Truck",
+  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Electric Truck dalam kondisi mati dan aman untuk dikerjakan.",
+  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, stabil, dan aman dari lalu lintas pergerakan alat berat lain.",
+  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) bebas dari rintangan dan pekerja lain yang tidak berkepentingan.",
+  rekomendasiArea360: "Pasang barikade atau safety cone jika diperlukan untuk membatasi area kerja di sekitar unit.",
+  hasilEnergiBerbahaya: "Terdapat kelistrikan DC pada komponen Dispatch (Goic, Mikrotik, Antenna GPS).",
+  rekomendasiEnergiBerbahaya: "Lakukan prosedur Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag sebelum melakukan pengecekan hardware/kabel.",
+  hasilPj: "Penanggung jawab area telah dilapori dan mengizinkan perbaikan.",
+  rekomendasiPj: "Lakukan eskalasi dan serahkan Worksheet yang telah diisi kepada pengawas dan Helpdesk MKN setelah pekerjaan selesai.",
+  langkahKerja: `1. Mempersiapkan Tools dan datang ke lokasi parkir unit (area Light Vehicle).
+2. Melapor kepada pengawas atau penanggung jawab area.
+3. Lakukan Isolasi & lock out sesuai prosedur (IK-HSE-08-04).
+4. Naikan Tool dan part dispatch menggunakan metode 3 titik tumpu.
+5. Lakukan Troubleshooting Hardware/Software:
+   - Dispatch Stuck: Test menu Goic, jika tidak merespon lakukan reset power/toggle, test network dengan login ID.
+   - Tidak Terkoneksi: Cek kabel LMR/Coaxial, konektor "N", RJ45, dan kabel LAN dari Mikrotik. Reset/ganti jika rusak.
+   - GPS Stuck/Not Found: Cek wiring terlipat/putus, cek tegangan inner dan ground (3.2V - 5V), ganti konektor jika short, atau reset via software Cygwincell.
+   - Boot Mode: Akses via MLINK laptop, reload Hub & Goic, reset power.
+   - Goic ter-generic: Lakukan install ulang Goic.
+   - Fatique Warning hilang: Cek signal & fisik antenna.
+   - Touchscreen / Speaker bermasalah: Kalibrasi ulang atau ganti perangkat.
+6. Bersihkan area kerja, pastikan tidak ada tools/material tertinggal.
+7. Turunkan tools dengan metode 3 titik tumpu.
+8. Lepas Padlock beserta Personal Danger Tag.
+9. Informasikan ke pengawas & Helpdesk, serta lengkapi Worksheet.`,
+  potensiBahaya: `- Terjatuh dari alat berat (saat naik/turun unit).
+- Tersengat listrik (saat mengecek tegangan inner/ground GPS, power Mikrotik, atau Goic).
+- Tergores benda tajam / Terjepit (saat memasang connector menggunakan cutter atau crimping tool).
+- Unit bergerak tiba-tiba jika prosedur Isolasi/LOTO tidak dipatuhi.`,
+  kontrolResiko: `- Gunakan tiga (3) titik tumpu saat naik/turun unit.
+- Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
+- Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
+- Hindari titik jepit dan bagian tajam saat menggunakan cutter, crimping tool, tang potong, dan tang lancip.
+- Wajib melakukan Isolasi & Lock Out (Padlock & Personal Danger Tag) sebelum bekerja.
+- Wajib menggunakan APD lengkap (seragam, sepatu safety, helmet, kacamata).`,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
+};
+
+const defaultSopTemplateDispatchHaul: SopTemplate = {
+  ...defaultSopTemplateDispatchElectric,
+  id: "default-4",
+  jenisUnit: "Haul Truck",
+  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Haul Truck dalam kondisi mati dan aman untuk dikerjakan.",
 };
 
 export const useSopStore = create<SopStore>()(
   persist(
     (set) => ({
-      templates: [defaultSopTemplate, defaultSopTemplateHaulTruck],
+      templates: [defaultSopTemplate, defaultSopTemplateHaulTruck, defaultSopTemplateDispatchElectric, defaultSopTemplateDispatchHaul],
       addTemplate: (template) => set((state) => ({
         templates: [
           ...state.templates,
@@ -142,7 +190,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v2',
+      name: 'sop-templates-storage-v3',
     }
   )
 );
