@@ -30,22 +30,22 @@ export function CopyableField({ label, value }: CopyableFieldProps) {
   };
 
   return (
-    <div className="space-y-1.5 p-3 rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+    <div className="space-y-1.5 p-3 rounded-lg border border-border bg-muted/30 hover:bg-muted/60 transition-colors duration-[2500ms]">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-teal-900">{label}</label>
+        <label className="text-sm font-medium text-foreground">{label}</label>
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 px-2 text-gray-500 hover:text-teal-700 hover:bg-teal-50"
+          className="h-8 px-2 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
           onClick={handleCopy}
           title={`Copy ${label}`}
         >
-          {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
           <span className="sr-only">Copy</span>
         </Button>
       </div>
-      <div className="text-sm text-gray-700 whitespace-pre-wrap min-h-[1.25rem]">
-        {value || <span className="text-gray-400 italic">Data kosong</span>}
+      <div className="text-sm text-foreground/80 whitespace-pre-wrap min-h-[1.25rem] transition-colors duration-[2500ms]">
+        {value || <span className="text-muted-foreground italic">Data kosong</span>}
       </div>
     </div>
   );

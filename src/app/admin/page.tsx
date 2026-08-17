@@ -5,8 +5,8 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <LayoutDashboard className="h-6 w-6 text-teal-700" />
-        <h1 className="text-3xl font-bold tracking-tight text-teal-900">Admin Dashboard</h1>
+        <LayoutDashboard className="h-6 w-6 text-primary" />
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Admin Dashboard</h1>
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

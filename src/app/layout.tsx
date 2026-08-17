@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { PwaInstallPrompt } from "@/components/PwaInstallPrompt";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,16 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.className} h-full antialiased bg-gray-50 overflow-x-hidden`}>
-      <body className="min-h-full flex flex-col overflow-x-hidden">
-        <div className="flex-1 flex flex-col">
-          {children}
-        </div>
-        <footer className="py-4 text-center text-xs text-gray-500 border-t bg-white">
-          Made with ❤️ by Arwan | Property Of AR-D3V
-        </footer>
-        <Toaster />
-        <PwaInstallPrompt />
+    <html lang="en" suppressHydrationWarning className={`${inter.className} h-full antialiased overflow-x-hidden`}>
+      <body className="min-h-full flex flex-col overflow-x-hidden transition-colors duration-[2500ms]">
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
+          <footer className="py-4 text-center text-xs text-muted-foreground border-t bg-card/80 backdrop-blur-md">
+            Made with ❤️ by Arwan | Property Of AR-D3V
+          </footer>
+          <Toaster />
+          <PwaInstallPrompt />
+        </ThemeProvider>
       </body>
     </html>
   );

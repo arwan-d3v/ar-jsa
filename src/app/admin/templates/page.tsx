@@ -164,21 +164,21 @@ export default function TemplatesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <FileText className="h-6 w-6 text-teal-700" />
-          <h1 className="text-3xl font-bold tracking-tight text-teal-900">Template Observasi</h1>
+          <FileText className="h-6 w-6 text-primary" />
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Template Observasi</h1>
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger
             render={
-              <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800" />
+              <Button onClick={handleOpenDialog} className="bg-primary hover:bg-primary/90 text-primary-foreground" />
             }
           >
             <Plus className="mr-2 h-4 w-4" /> Tambah Template
           </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
-            <DialogHeader className="p-6 pb-4 border-b bg-gray-50/50">
-              <DialogTitle className="text-xl">{editingId ? "Edit Template Observasi" : "Tambah Template Observasi"}</DialogTitle>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0 bg-card border-border">
+            <DialogHeader className="p-6 pb-4 border-b border-border bg-muted/30">
+              <DialogTitle className="text-xl text-foreground">{editingId ? "Edit Template Observasi" : "Tambah Template Observasi"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col min-h-[50vh]">
               <Tabs defaultValue="parameter" className="w-full flex-1 flex flex-col">
@@ -195,36 +195,36 @@ export default function TemplatesPage() {
                   <TabsContent value="parameter" className="space-y-6 mt-0">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold">Type Pekerjaan</label>
+                        <label className="text-sm font-semibold text-foreground">Type Pekerjaan</label>
                         <Select value={selectedType} onValueChange={setSelectedType} disabled={!!editingId}>
-                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedType ? typePekerjaan.find(t => t.id === selectedType)?.nama : "Pilih type"}</SelectValue></SelectTrigger>
+                          <SelectTrigger className="w-full bg-background border-border"><SelectValue>{selectedType ? typePekerjaan.find(t => t.id === selectedType)?.nama : "Pilih type"}</SelectValue></SelectTrigger>
                           <SelectContent>
                             {typePekerjaan.map(t => <SelectItem key={t.id} value={t.id}>{t.nama}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold">Jenis Unit</label>
+                        <label className="text-sm font-semibold text-foreground">Jenis Unit</label>
                         <Select value={selectedUnit} onValueChange={setSelectedUnit} disabled={!!editingId}>
-                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedUnit ? jenisUnit.find(u => u.id === selectedUnit)?.nama : "Pilih unit"}</SelectValue></SelectTrigger>
+                          <SelectTrigger className="w-full bg-background border-border"><SelectValue>{selectedUnit ? jenisUnit.find(u => u.id === selectedUnit)?.nama : "Pilih unit"}</SelectValue></SelectTrigger>
                           <SelectContent>
                             {jenisUnit.map(u => <SelectItem key={u.id} value={u.id}>{u.nama}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold">Cuaca</label>
+                        <label className="text-sm font-semibold text-foreground">Cuaca</label>
                         <Select value={selectedCuaca} onValueChange={setSelectedCuaca} disabled={!!editingId}>
-                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedCuaca ? (() => { const c = cuaca.find(c => c.id === selectedCuaca); return c ? `${c.icon} ${c.nama}` : "Pilih cuaca" })() : "Pilih cuaca"}</SelectValue></SelectTrigger>
+                          <SelectTrigger className="w-full bg-background border-border"><SelectValue>{selectedCuaca ? (() => { const c = cuaca.find(c => c.id === selectedCuaca); return c ? `${c.icon} ${c.nama}` : "Pilih cuaca" })() : "Pilih cuaca"}</SelectValue></SelectTrigger>
                           <SelectContent>
                             {cuaca.map(c => <SelectItem key={c.id} value={c.id}>{c.icon} {c.nama}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold">Kondisi</label>
+                        <label className="text-sm font-semibold text-foreground">Kondisi</label>
                         <Select value={selectedKondisi} onValueChange={setSelectedKondisi} disabled={!!editingId}>
-                          <SelectTrigger className="w-full bg-white"><SelectValue>{selectedKondisi ? kondisi.find(k => k.id === selectedKondisi)?.nama : "Pilih kondisi"}</SelectValue></SelectTrigger>
+                          <SelectTrigger className="w-full bg-background border-border"><SelectValue>{selectedKondisi ? kondisi.find(k => k.id === selectedKondisi)?.nama : "Pilih kondisi"}</SelectValue></SelectTrigger>
                           <SelectContent>
                             {kondisi.map(k => <SelectItem key={k.id} value={k.id}>{k.nama}</SelectItem>)}
                           </SelectContent>
@@ -237,36 +237,36 @@ export default function TemplatesPage() {
                   <TabsContent value="area" className="space-y-5 mt-0">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Hasil pemeriksaan area</label>
-                        <Textarea className="resize-none h-20" value={hArea} onChange={e => setHArea(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Hasil pemeriksaan area</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={hArea} onChange={e => setHArea(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Rekomendasi area</label>
-                        <Textarea className="resize-none h-20" value={rArea} onChange={e => setRArea(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Rekomendasi area</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={rArea} onChange={e => setRArea(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Hasil pemeriksaan area 360</label>
-                        <Textarea className="resize-none h-20" value={hArea360} onChange={e => setHArea360(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Hasil pemeriksaan area 360</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={hArea360} onChange={e => setHArea360(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Rekomendasi area 360</label>
-                        <Textarea className="resize-none h-20" value={rArea360} onChange={e => setRArea360(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Rekomendasi area 360</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={rArea360} onChange={e => setRArea360(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Hasil energi berbahaya</label>
-                        <Textarea className="resize-none h-20" value={hEnergi} onChange={e => setHEnergi(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Hasil energi berbahaya</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={hEnergi} onChange={e => setHEnergi(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Rekomendasi energi berbahaya</label>
-                        <Textarea className="resize-none h-20" value={rEnergi} onChange={e => setREnergi(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Rekomendasi energi berbahaya</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={rEnergi} onChange={e => setREnergi(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Hasil penanggung jawab</label>
-                        <Textarea className="resize-none h-20" value={hPj} onChange={e => setHPj(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Hasil penanggung jawab</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={hPj} onChange={e => setHPj(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Rekomendasi penanggung jawab</label>
-                        <Textarea className="resize-none h-20" value={rPj} onChange={e => setRPj(e.target.value)} />
+                        <label className="text-sm font-medium text-foreground">Rekomendasi penanggung jawab</label>
+                        <Textarea className="resize-none h-20 bg-background border-border" value={rPj} onChange={e => setRPj(e.target.value)} />
                       </div>
                     </div>
                   </TabsContent>
@@ -274,23 +274,23 @@ export default function TemplatesPage() {
                   {/* TAB 3: JSA */}
                   <TabsContent value="jsa" className="space-y-5 mt-0">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Urutan langkah kerja</label>
-                      <Textarea className="resize-none h-24" value={langkah} onChange={e => setLangkah(e.target.value)} />
+                      <label className="text-sm font-medium text-foreground">Urutan langkah kerja</label>
+                      <Textarea className="resize-none h-24 bg-background border-border" value={langkah} onChange={e => setLangkah(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Potensi bahaya/resiko</label>
-                      <Textarea className="resize-none h-24" value={bahaya} onChange={e => setBahaya(e.target.value)} />
+                      <label className="text-sm font-medium text-foreground">Potensi bahaya/resiko</label>
+                      <Textarea className="resize-none h-24 bg-background border-border" value={bahaya} onChange={e => setBahaya(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Kontrol resiko</label>
-                      <Textarea className="resize-none h-24" value={kontrol} onChange={e => setKontrol(e.target.value)} />
+                      <label className="text-sm font-medium text-foreground">Kontrol resiko</label>
+                      <Textarea className="resize-none h-24 bg-background border-border" value={kontrol} onChange={e => setKontrol(e.target.value)} />
                     </div>
                   </TabsContent>
                 </div>
               </Tabs>
               
-              <div className="p-6 pt-4 border-t bg-gray-50/50 mt-auto">
-                <Button type="submit" className="w-full bg-teal-700 hover:bg-teal-800 font-semibold h-11" disabled={isSubmitting}>
+              <div className="p-6 pt-4 border-t border-border bg-muted/30 mt-auto">
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold h-11" disabled={isSubmitting}>
                   {isSubmitting ? "Menyimpan..." : "Simpan Template"}
                 </Button>
               </div>
@@ -299,7 +299,7 @@ export default function TemplatesPage() {
         </Dialog>
       </div>
 
-      <div className="rounded-md border bg-white">
+      <div className="rounded-md border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -337,9 +337,9 @@ export default function TemplatesPage() {
                   </TableCell>
                   <TableCell>
                     {item.is_active ? (
-                      <Badge className="bg-teal-100 text-teal-800 hover:bg-teal-100">Aktif</Badge>
+                      <Badge className="bg-primary/20 text-primary hover:bg-primary/30 border-none">Aktif</Badge>
                     ) : (
-                      <Badge variant="secondary">Nonaktif</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">Nonaktif</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
