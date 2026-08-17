@@ -163,10 +163,83 @@ const defaultSopTemplateDispatchHaul: SopTemplate = {
   hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Haul Truck dalam kondisi mati dan aman untuk dikerjakan.",
 };
 
+const baseRadioKomunikasi: Omit<SopTemplate, 'id' | 'jenisUnit'> = {
+  typePekerjaan: "Perbaikan Radio Komunikasi",
+  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit dalam kondisi mati dan peralatan kerja (bucket/blade) sudah diturunkan ke tanah.",
+  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, aman dari lalu lintas alat berat. Pastikan operator sudah keluar dari kabin.",
+  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) aman dan bebas dari alat berat lain yang beroperasi.",
+  rekomendasiArea360: "Pasang barikade/safety cone jika area kerja berpotensi dilalui alat berat lain.",
+  hasilEnergiBerbahaya: "Terdapat kelistrikan DC (12V - 24V) pada power converter dan radio.",
+  rekomendasiEnergiBerbahaya: "Wajib melakukan Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag sebelum bekerja pada kelistrikan.",
+  hasilPj: "Penanggung jawab area telah dilapori dan pekerjaan diizinkan.",
+  rekomendasiPj: "Lapor ke pengawas atau Oscar base dan Helpdesk setelah pekerjaan selesai, lalu serahkan Worksheet.",
+  langkahKerja: `1. Mempersiapkan tools dan datang ke lokasi unit.
+2. Melapor ke penanggung jawab area.
+3. Parkir LV di tempat yang aman. Lakukan komunikasi positif dengan operator unit untuk mematikan mesin.
+4. Pastikan attachment unit diturunkan ke tanah (bucket/blade/ripper). Khusus Haul Truck, jika mengecek converter di belakang kabin, pastikan dump body naik full dan PIN LOCK terpasang.
+5. Lakukan Isolasi & lock out sesuai prosedur (IK-HSE-08-04) dengan memasang Padlock dan Personal Danger Tag.
+6. Naik/turun unit selalu menggunakan metode 3 titik tumpu.
+7. Lakukan pengecekan/perbaikan:
+   - Radio Mati Total: Ukur tegangan di konektor power radio (12 - 13.5 VDC). Jika normal, ganti radio. Jika tidak ada tegangan, cek output converter 12V, kabel power, dan fuse 15A. Jika converter 24V ke 12V rusak, lakukan penggantian.
+   - Tidak Bisa Mengirim: Cek Microphone (kabel, konektor, PTT). Cek TX indicator. Cek Antena (visual, continuity kabel, SWR maksimal 1.5). Cek power out-put radio (10-20 Watt). Cek program radio. Lakukan test call.
+   - Tidak Bisa Menerima: Cek Antena dan kabel seperti langkah di atas. Cek program. Jika semua normal tapi tetap rusak, ganti unit radio.
+8. Pekerjaan selesai: Bersihkan area kerja dan kumpulkan tools.
+9. Turun dari unit menggunakan 3 titik tumpu.
+10. Lepas Padlock dan Personal Danger Tag.
+11. Lapor ke pengawas/Oscar base dan Helpdesk MKN.
+12. Lengkapi dan serahkan Worksheet.`,
+  potensiBahaya: `- Terjatuh dari alat berat (ketinggian di atas kabin atau saat naik/turun).
+- Tergores/Terpotong (benda tajam, cutter).
+- Terjepit (saat crimping connector atau area dump body pada Haul Truck).
+- Tersengat arus pendek kelistrikan unit (12V/24V).`,
+  kontrolResiko: `- Wajib menggunakan metode 3 titik tumpu saat naik/turun unit.
+- Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
+- Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
+- Hindari sisi tajam saat memakai cutter; perhatikan titik jepit saat menggunakan tang/crimping.
+- WAJIB pasang PIN LOCK jika berada di bawah dump body Haul Truck yang sedang diangkat.
+- Lakukan prosedur LOTO secara disiplin.
+- Gunakan APD lengkap (Helmet, kacamata, safety shoes, seragam).`,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
+const defaultSopTemplateRadioShovel: SopTemplate = {
+  ...baseRadioKomunikasi,
+  id: "default-5",
+  jenisUnit: "Shovel / Big Digger",
+};
+
+const defaultSopTemplateRadioHaulTruck: SopTemplate = {
+  ...baseRadioKomunikasi,
+  id: "default-6",
+  jenisUnit: "Haul Truck",
+};
+
+const defaultSopTemplateRadioDozer: SopTemplate = {
+  ...baseRadioKomunikasi,
+  id: "default-7",
+  jenisUnit: "Dozer",
+};
+
+const defaultSopTemplateRadioBackhoe: SopTemplate = {
+  ...baseRadioKomunikasi,
+  id: "default-8",
+  jenisUnit: "Backhoe / Small Digger",
+};
+
 export const useSopStore = create<SopStore>()(
   persist(
     (set) => ({
-      templates: [defaultSopTemplate, defaultSopTemplateHaulTruck, defaultSopTemplateDispatchElectric, defaultSopTemplateDispatchHaul],
+      templates: [
+        defaultSopTemplate, 
+        defaultSopTemplateHaulTruck, 
+        defaultSopTemplateDispatchElectric, 
+        defaultSopTemplateDispatchHaul,
+        defaultSopTemplateRadioShovel,
+        defaultSopTemplateRadioHaulTruck,
+        defaultSopTemplateRadioDozer,
+        defaultSopTemplateRadioBackhoe
+      ],
       addTemplate: (template) => set((state) => ({
         templates: [
           ...state.templates,
@@ -190,7 +263,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v3',
+      name: 'sop-templates-storage-v4',
     }
   )
 );
