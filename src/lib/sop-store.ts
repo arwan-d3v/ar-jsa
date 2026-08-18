@@ -227,6 +227,69 @@ const defaultSopTemplateRadioBackhoe: SopTemplate = {
   jenisUnit: "Backhoe / Small Digger",
 };
 
+const defaultSopTemplateRadioArticulated: SopTemplate = {
+  ...baseRadioKomunikasi,
+  id: "default-9",
+  jenisUnit: "Articulated Dump Truck",
+};
+
+const defaultSopTemplateRadioFMArticulated: SopTemplate = {
+  ...baseRadioKomunikasi,
+  typePekerjaan: "Perbaikan Radio FM",
+  id: "default-10",
+  jenisUnit: "Articulated Dump Truck",
+};
+
+const defaultSopTemplateRadioFMDozer: SopTemplate = {
+  ...baseRadioKomunikasi,
+  typePekerjaan: "Perbaikan Radio FM",
+  id: "default-11",
+  jenisUnit: "Dozer",
+};
+
+const defaultSopTemplateTower: SopTemplate = {
+  id: "default-12",
+  typePekerjaan: "Instalasi / Dismantel Peralatan",
+  jenisUnit: "Tower",
+  hasilPemeriksaanArea: "Area tower dan sekitarnya aman untuk dilakukan pekerjaan instalasi/dismantel.",
+  rekomendasiArea: "Pastikan area kerja di bawah tower diamankan, gunakan barikade jika perlu untuk membatasi area dari orang yang tidak berkepentingan.",
+  hasilPemeriksaanArea360: "Kondisi sekeliling tower aman dari rintangan dan bebas dari potensi bahaya di area dasar.",
+  rekomendasiArea360: "Pastikan tidak ada pekerja lain yang berada tepat di bawah area pemanjatan untuk menghindari bahaya kejatuhan benda/peralatan (dropped objects).",
+  hasilEnergiBerbahaya: "Potensi energi berbahaya dari radiasi antena RF atau kelistrikan peralatan.",
+  rekomendasiEnergiBerbahaya: "Pastikan peralatan yang akan didismantel sudah tidak bertegangan (LOTO jika diperlukan). Hindari area paparan radiasi tinggi.",
+  hasilPj: "Penanggung jawab area dan Team Rescue telah dilapori dan disetujui.",
+  rekomendasiPj: "Wajib lapor kepada pejabat berwenang setempat dan Team rescue sebelum melakukan pemanjatan, dan laporkan kembali setelah pekerjaan selesai.",
+  langkahKerja: `1. Persiapkan tools yang sesuai dengan pekerjaan.
+2. Wajib melapor kepada penanggung jawab area atau yang ditunjuk saat tiba dilokasi dan sebelum memulai pekerjaan.
+3. Lakukan observasi dan Identifikasi bahaya area kerja untuk memastikan pekerjaan aman dilakukan (Isi JSA).
+4. Pastikan posisi/ titik peralatan yang akan di install / dismantle.
+5. Lapor kepada pejabat berwewenang setempat (responsibility area) dan Team rescue sebelum melakukan pemanjatan.
+6. Lakukan teknik pemanjatan dengan benar (tiga titik tumpu), gunakan full body harness dan twin lanyard, serta membawa tali untuk menarik material dari bawah keatas atau sebaliknya.
+7. Ikat katrol pada Anchor poin dengan benar dan kuat. Pastikan potensi tangan/ jari terjepit.
+8. Pasang tali pengangkat pada katrol. Ikat material yang akan diangkat atau dilepas pada peralatan tersebut.
+9. Lepas baut peralatan tersebut jika dismantel.
+10. Kencangkan tali pengikat, tarik atau angkat secara bersama-sama dengan komando leader lapangan.
+11. Kencangkan baut setelah posisi bracket benar (jika instalasi baru).
+12. Pointing antena tersebut jika poin to point wireless / tidak dilakukan pointing jika omni antenna. Cari signal sampai bagus (gunakan multi tester atau notebook).
+13. Kencangkan semua baut pada poin instalasi tersebut.
+14. Turunkan semua peralatan kerja dengan tali.
+15. Bersihkan semua sisa material kerja setelah pekerjaan selesai.
+16. Lapor kepada pejabat berwewenang setempat (responsibility area) dan Team rescue setelah pekerjaan selesai.
+17. Informasikan kepada helpdesk dan user, serta lengkapi worksheet.`,
+  potensiBahaya: `- Terjatuh dari ketinggian saat memanjat atau bekerja di tower.
+- Kejatuhan material / tools dari atas tower (Dropped Object).
+- Terjepit saat memasang katrol, menarik tali, atau mengencangkan baut.
+- Tersengat listrik atau terpapar radiasi RF dari peralatan telekomunikasi.`,
+  kontrolResiko: `- Gunakan Fullbody Harness dengan Twin lanyard, Helm bertali, Sarung tangan, Safety Shoes (Standar WAH for Worker).
+- Selalu terapkan teknik pemanjatan 3 titik tumpu (Three-point contact).
+- Gunakan tali pengangkat dan katrol yang diikat kuat pada anchor point untuk menaikkan/menurunkan material.
+- Pastikan area bawah tower dibarikade/dikosongkan untuk mencegah pekerja lain terkena jatuhan material.
+- Perhatikan titik jepit tangan/jari saat memasang peralatan.
+- Lakukan Analisa keselamatan kerja (JSA) dan buat rencana keadaan darurat sebelum bekerja.`,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
 export const useSopStore = create<SopStore>()(
   persist(
     (set) => ({
@@ -238,7 +301,11 @@ export const useSopStore = create<SopStore>()(
         defaultSopTemplateRadioShovel,
         defaultSopTemplateRadioHaulTruck,
         defaultSopTemplateRadioDozer,
-        defaultSopTemplateRadioBackhoe
+        defaultSopTemplateRadioBackhoe,
+        defaultSopTemplateRadioArticulated,
+        defaultSopTemplateRadioFMArticulated,
+        defaultSopTemplateRadioFMDozer,
+        defaultSopTemplateTower
       ],
       addTemplate: (template) => set((state) => ({
         templates: [
@@ -263,7 +330,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v4',
+      name: 'sop-templates-storage-v5',
     }
   )
 );
