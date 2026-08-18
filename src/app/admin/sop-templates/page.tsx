@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { useSopStore, SopTemplate } from "@/lib/sop-store";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -135,9 +136,9 @@ export default function SopTemplatePage() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger 
-            render={<Button onClick={handleOpenDialog} className="bg-primary hover:bg-primary/90 text-primary-foreground" />}
+            render={<Button onClick={handleOpenDialog} className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 flex items-center justify-center p-0 md:static md:w-auto md:h-10 md:rounded-md md:px-4 md:py-2 md:shadow-none bg-primary hover:bg-primary/90 text-primary-foreground" />}
           >
-            <Plus className="mr-2 h-4 w-4" /> Tambah SOP
+            <Plus className="h-6 w-6 md:h-4 md:w-4 md:mr-2" /> <span className="hidden md:inline">Tambah SOP</span>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0 bg-card border-border">
             <DialogHeader className="p-6 pb-4 border-b border-border bg-muted/30">
@@ -258,7 +259,8 @@ export default function SopTemplatePage() {
         </div>
       </div>
 
-      <div className="rounded-md border border-border bg-card overflow-hidden">
+      {/* Desktop View */}
+      <div className="hidden md:block rounded-md border border-border bg-card overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -302,6 +304,45 @@ export default function SopTemplatePage() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile View */}
+      <div className="md:hidden space-y-4">
+        {filteredTemplates.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground bg-card rounded-md border border-border">
+            Tidak ada SOP yang ditemukan.
+          </div>
+        ) : (
+          filteredTemplates.map((item) => (
+            <div key={item.id} className="bg-card p-4 rounded-md border border-border shadow-sm flex flex-col gap-3">
+              <div className="flex justify-between items-start gap-2">
+                <div className="space-y-1">
+                  <h3 className="font-semibold text-foreground line-clamp-2">{item.typePekerjaan}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant="outline" className="text-xs font-normal text-muted-foreground bg-muted/20">
+                      {item.jenisUnit}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2 shrink-0">
+                  <span className="text-[10px] text-muted-foreground">
+                    {new Date(item.updatedAt).toLocaleDateString("id-ID", {
+                      day: "numeric", month: "short", year: "numeric"
+                    })}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t border-border mt-1">
+                <Button variant="outline" size="sm" onClick={() => handleEdit(item)} className="h-8 text-primary border-primary/20 hover:bg-primary/5">
+                  <Pencil className="h-4 w-4 mr-1" /> Edit
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => handleDelete(item.id)} className="h-8 text-destructive border-destructive/20 hover:bg-destructive/5">
+                  <Trash2 className="h-4 w-4 mr-1" /> Hapus
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

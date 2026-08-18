@@ -31,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.className} h-full antialiased overflow-x-hidden`}>
-      <body className="min-h-full flex flex-col overflow-x-hidden transition-colors duration-[2500ms]">
+    <html lang="en" suppressHydrationWarning className={`${inter.className} h-full antialiased`}>
+      <body className="min-h-full flex flex-col transition-colors duration-[2500ms]">
         <ThemeProvider attribute="class" defaultTheme="light">
           <div className="flex-1 flex flex-col">
             {children}

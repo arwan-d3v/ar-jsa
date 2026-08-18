@@ -92,8 +92,8 @@ export default function KondisiPage() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger render={
-            <Button onClick={handleOpenDialog} className="bg-teal-700 hover:bg-teal-800">
-              <Plus className="mr-2 h-4 w-4" /> Tambah Kondisi
+            <Button onClick={handleOpenDialog} className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 flex items-center justify-center p-0 md:static md:w-auto md:h-10 md:rounded-md md:px-4 md:py-2 md:shadow-none bg-teal-700 hover:bg-teal-800">
+              <Plus className="h-6 w-6 md:h-4 md:w-4 md:mr-2" /> <span className="hidden md:inline">Tambah Kondisi</span>
             </Button>
           } />
           <DialogContent>
@@ -147,7 +147,8 @@ export default function KondisiPage() {
         </Dialog>
       </div>
 
-      <div className="rounded-md border bg-white">
+      {/* Desktop View */}
+      <div className="hidden md:block rounded-md border bg-white">
         <Table>
           <TableHeader>
             <TableRow>
@@ -208,6 +209,53 @@ export default function KondisiPage() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile View */}
+      <div className="md:hidden space-y-4">
+        {isSyncing && data.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground bg-white rounded-md border">
+            Memuat data...
+          </div>
+        ) : data.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground bg-white rounded-md border">
+            Belum ada data.
+          </div>
+        ) : (
+          data.map((item) => (
+            <div key={item.id} className="bg-white p-4 rounded-md border shadow-sm flex flex-col gap-3">
+              <div className="flex justify-between items-start gap-2">
+                <div>
+                  <h3 className="font-semibold text-foreground">{item.nama}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: item.color || '#ccc' }}></div>
+                    <span className="text-xs text-muted-foreground">{item.color}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  {item.is_active ? (
+                    <Badge className="bg-teal-100 text-teal-800 hover:bg-teal-100">Aktif</Badge>
+                  ) : (
+                    <Badge variant="secondary">Nonaktif</Badge>
+                  )}
+                  {item.severity === 0 && <Badge variant="outline" className="text-[10px]">0 - Normal</Badge>}
+                  {item.severity === 1 && <Badge variant="outline" className="border-yellow-500 text-yellow-700 text-[10px]">1 - Warning</Badge>}
+                  {item.severity === 2 && <Badge variant="outline" className="border-red-500 text-red-700 text-[10px]">2 - Danger</Badge>}
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t mt-1">
+                <Button variant="outline" size="sm" onClick={() => handleEdit(item)} className="h-8">
+                  <Edit2 className="h-4 w-4 mr-1" /> Edit
+                </Button>
+                {item.is_active && (
+                  <Button variant="outline" size="sm" onClick={() => handleDelete(item.id)} className="h-8 text-red-500 hover:text-red-700 border-red-200 hover:bg-red-50">
+                    <Trash2 className="h-4 w-4 mr-1" /> Hapus
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
