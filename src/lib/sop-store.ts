@@ -111,6 +111,7 @@ const defaultSopTemplateHaulTruck: SopTemplate = {
 - Hindari sisi tajam cutter dan perhatikan titik jepit saat crimping connector.
 - Selalu patuhi prosedur LOTO (Lock Out Tag Out) sebelum memulai intervensi elektrik.
 - Wajib menggunakan APD standar (seragam, sepatu safety, helmet, kacamata).`,
+  createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
 
@@ -290,6 +291,60 @@ const defaultSopTemplateTower: SopTemplate = {
   updatedAt: new Date().toISOString(),
 };
 
+const defaultSopTemplatePMWorkshop: SopTemplate = {
+  id: "default-13",
+  typePekerjaan: "PM Perangkat Komunikasi (Workshop)",
+  jenisUnit: "Heavy Equipment",
+  hasilPemeriksaanArea: "Area bay workshop aktif dengan aktivitas perawatan unit bersama mekanik dan kontraktor lain. Terdapat pergerakan unit keluar/masuk bay, alat support (forklift, tyre handler, lube truck) lalu lalang, serta overhead crane yang beroperasi di area atas bay.",
+  rekomendasiArea: "Parkir kendaraan LV di area yang sudah disediakan. Lapor dan koordinasikan pekerjaan ke pengawas workshop serta mekanik/kontraktor sekitar. Pastikan jalur evakuasi tidak terhalang dan selalu jalin komunikasi 2 arah yang aktif.",
+  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) terdapat aktivitas pekerjaan simultan (SIMOPS): pekerjaan mekanik, pengelasan/hot work, debu gerinda, pergerakan alat bantu workshop, dan lintasan overhead crane di atas.",
+  rekomendasiArea360: "Tetap waspada dan jangan berada di radius ayunan/lintasan overhead crane (DILARANG berdiri di bawah beban menggantung / suspended load). Lakukan kontak visual/komunikasi 2 arah dengan operator alat bantu dan pekerja sekitar. Hindari menatap percikan api las dan pasang barrier/welding screen jika diperlukan.",
+  hasilEnergiBerbahaya: "Terdapat sumber kelistrikan DC unit, risiko short circuit, serta potensi energi gerak mekanikal/hidrolik unit yang sedang diservis mekanik.",
+  rekomendasiEnergiBerbahaya: "Isolation Officer wajib melakukan Isolasi & Lock Out (IK-HSE-08-04). Setiap teknisi wajib memasang Padlock dan Personal Danger Tag milik masing-masing. Dilarang melepas padlock milik orang lain.",
+  hasilPj: "Pengawas workshop dan penanggung jawab unit telah dilapori serta pekerjaan telah diizinkan.",
+  rekomendasiPj: "Dapatkan izin kerja resmi dari pengawas workshop. Jika menemukan kondisi tidak aman, hentikan pekerjaan (Stop Work Authority) dan lapor ke pengawas. Setelah selesai, informasikan ke pengawas workshop dan lengkapi Worksheet (FM-OPS-01-05).",
+  langkahKerja: `1. Supervisi / Helpdesk memberi tugas / job order untuk PM unit Heavy Equipment.
+2. Mempersiapkan tools, APD, dan formulir inspeksi (FM-OPS-01-05 rev.04) sesuai pekerjaan.
+3. Datang ke lokasi workshop dan parkir kendaraan LV di tempat yang sudah disediakan.
+4. Melapor ke pengawas workshop atau penanggung jawab unit untuk koordinasi pekerjaan perawatan bersama dengan mekanik.
+5. Bersama tim melakukan analisa keselamatan kerja dan dituangkan dalam Form Observasi Lingkungan Kerja.
+6. Isolation Officer melakukan Isolasi & Lock Out sesuai prosedur (IK-HSE-08-04).
+7. Semua teknisi memasang Padlock beserta Personal Danger Tag masing-masing pada hasp/lockbox.
+8. Lakukan komunikasi 2 arah dengan mekanik, operator overhead crane, dan pekerja lain di sekitar bay sebelum menaiki unit.
+9. Pastikan overhead crane tidak sedang melintas membawa beban di atas area bay kerja.
+10. Naik ke atas unit dengan metode 3 (tiga) titik tumpu (Three-point contact).
+11. Pasang Full Body Harness (single lanyard tanpa absorber untuk ketinggian <5 meter, atau single lanyard dengan absorber jika >5 meter tanpa platform/handrail).
+12. Lakukan pengecekan dan pemeliharaan perangkat komunikasi sesuai formulir (FM-OPS-01-05 rev.04).
+13. Tuangkan hasil pengecekan dan pemeliharaan ke dalam Formulir (FM-OPS-01-05 rev.04).
+14. Apabila ditemukan kerusakan pada kabel/konektor/komponen, lakukan perbaikan atau penggantian.
+15. Berhati-hati terhadap sisi tajam cutter saat kupas kabel dan titik jepit crimping saat memasang konektor.
+16. Jika pekerjaan selesai, bersihkan area kerja, masukkan tools ke dalam tas tools dan pastikan tidak ada material/perkakas tertinggal di atas unit.
+17. Turunkan tools dan turun dari unit menggunakan metode 3 titik tumpu.
+18. Lepas Padlock beserta Personal Danger Tag milik sendiri (tidak dibenarkan melepas milik orang lain).
+19. Informasikan ke pengawas workshop atau penanggung jawab unit bahwa pemeliharaan perangkat komunikasi sudah selesai.
+20. Lengkapi Worksheet (tulis stock code material, serial number radio, panel ID, fleet, firmware) dan serahkan ke supervisor setelah sampai di kantor.`,
+  potensiBahaya: `- Tertabrak / terserempet unit alat berat yang keluar/masuk bay atau alat support yang lalu lalang (forklift, tyre handler, lube truck).
+- Tertimpa beban menggantung (suspended load) atau benturan dari pergerakan overhead crane yang melintas.
+- Terjatuh dari alat berat saat naik/turun unit atau bekerja di atas ketinggian kabin/chassis.
+- Bahaya pekerjaan simultan (SIMOPS): percikan api pengelasan (welding flash/hot work), debu gerinda, dan serpihan logam dari pekerjaan mekanik/kontraktor lain.
+- Terjepit titik jepit (crimping tool, pintu kompartemen unit, atau komponen bergerak mekanik).
+- Tergores sisi tajam cutter saat memotong kabel/conduit.
+- Tersengat arus listrik DC atau korsleting saat intervensi kelistrikan perangkat komunikasi.
+- Unit bergerak tiba-tiba jika prosedur LOTO diabaikan saat pekerjaan simultan dengan mekanik.`,
+  kontrolResiko: `- Wajib menjalin komunikasi 2 arah (verbal, kontak visual, atau radio) dan selalu waspada saat berada di radius kerja orang lain atau alat bantu workshop.
+- JANGAN PERNAH berdiri atau melintas di bawah beban yang menggantung (suspended load) pada overhead crane.
+- Berjalan di jalur aman pejalan kaki (walkway) dan perhatikan manuver alat support workshop.
+- Gunakan APD lengkap: Helmet dengan tali dagu, safety shoes, kacamata safety (dengan pelindung UV jika dekat area las), seragam kerja, dan sarung tangan kerja.
+- Bekerja di ketinggian <5m tanpa platform/handrail: gunakan Full Body Harness dengan single lanyard TANPA absorber.
+- Bekerja di ketinggian >5m tanpa platform/handrail: gunakan Full Body Harness dengan single lanyard DAN absorber.
+- Terapkan 3 titik tumpu saat naik/turun tangga unit; bawa peralatan kerja dalam tas tools.
+- Patuhi prosedur Isolasi & Lock Out (IK-HSE-08-04) dengan memasang Padlock dan Personal Danger Tag milik sendiri.
+- Pasang welding screen / barrier jika area kerja berdampingan langsung dengan pengelasan untuk melindungi dari bahaya flash.
+- Terapkan Stop Work Authority (SWA) bila kondisi dinilai tidak aman dan segera lapor ke pengawas workshop.`,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
 export const useSopStore = create<SopStore>()(
   persist(
     (set) => ({
@@ -297,15 +352,16 @@ export const useSopStore = create<SopStore>()(
         defaultSopTemplate, 
         defaultSopTemplateHaulTruck, 
         defaultSopTemplateDispatchElectric, 
-        defaultSopTemplateDispatchHaul,
-        defaultSopTemplateRadioShovel,
-        defaultSopTemplateRadioHaulTruck,
-        defaultSopTemplateRadioDozer,
-        defaultSopTemplateRadioBackhoe,
-        defaultSopTemplateRadioArticulated,
-        defaultSopTemplateRadioFMArticulated,
-        defaultSopTemplateRadioFMDozer,
-        defaultSopTemplateTower
+        defaultSopTemplateDispatchHaul, 
+        defaultSopTemplateRadioShovel, 
+        defaultSopTemplateRadioHaulTruck, 
+        defaultSopTemplateRadioDozer, 
+        defaultSopTemplateRadioBackhoe, 
+        defaultSopTemplateRadioArticulated, 
+        defaultSopTemplateRadioFMArticulated, 
+        defaultSopTemplateRadioFMDozer, 
+        defaultSopTemplateTower,
+        defaultSopTemplatePMWorkshop
       ],
       addTemplate: (template) => set((state) => ({
         templates: [
@@ -330,7 +386,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v5',
+      name: 'sop-templates-storage-v6',
     }
   )
 );
