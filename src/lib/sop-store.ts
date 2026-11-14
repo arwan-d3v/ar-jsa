@@ -296,11 +296,44 @@ const defaultSopTemplatePMWorkshop: SopTemplate = {
   typePekerjaan: "PM Perangkat Komunikasi (Workshop)",
   jenisUnit: "Heavy Equipment",
   hasilPemeriksaanArea: "Area bay workshop aktif dengan aktivitas perawatan unit bersama mekanik dan kontraktor lain. Terdapat pergerakan unit keluar/masuk bay, alat support (forklift, tyre handler, lube truck) lalu lalang, serta overhead crane yang beroperasi di area atas bay.",
-  rekomendasiArea: "Parkir kendaraan LV di area yang sudah disediakan. Lapor dan koordinasikan pekerjaan ke pengawas workshop serta mekanik/kontraktor sekitar. Pastikan jalur evakuasi tidak terhalang dan selalu jalin komunikasi 2 arah yang aktif.",
+  rekomendasiArea: `1. Akses & Area Parkir Light Vehicle (LV):
+   • Parkir kendaraan LV hanya pada area parkir yang telah disediakan di workshop.
+   • Pastikan posisi parkir tidak menghalangi jalur evakuasi (walkway), akses darurat, maupun pergerakan unit alat berat lain.
+2. Koordinasi & Komunikasi Positif Awal:
+   • Melapor dan jalin komunikasi positif dengan Pengawas yang bertanggung jawab atas unit yang akan dikerjakan untuk konfirmasi izin kerja.
+   • Koordinasikan detail lingkup pekerjaan pemeliharaan perangkat komunikasi kepada mekanik yang bertugas di bay tersebut.
+3. Koordinasi dengan Isolation Officer:
+   • Temui dan koordinasikan pekerjaan kepada Isolation Officer unit terkait sebelum memulai intervensi fisik/pekerjaan apa pun.
+   • Pastikan prosedur Isolasi & Lock Out (IK-HSE-08-04) telah terverifikasi dan pasang Padlock serta Personal Danger Tag masing-masing pada hasp/lockbox.
+4. Kewaspadaan Selama Pekerjaan Berlangsung:
+   • Selalu waspadai aktivitas dan dinamika pekerjaan sekitar di bay workshop (pergerakan unit alat berat, overhead crane, forklift, dan hot work/pengelasan).
+   • Pertahankan komunikasi 2 arah yang aktif dan kontak visual dengan mekanik/pekerja sekitar.
+5. Koordinasi Pekerjaan Simultan (Mitra Kontraktor Lain):
+   • Segera laporkan dan lakukan komunikasi langsung jika ada aktivitas pekerjaan yang bersinggungan dengan tim kerja dari mitra kontraktor lain.
+   • Lakukan penyelarasan metode kerja agar aktivitas dapat berlangsung simultan secara aman tanpa menimbulkan bahaya silang.`,
   hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) terdapat aktivitas pekerjaan simultan (SIMOPS): pekerjaan mekanik, pengelasan/hot work, debu gerinda, pergerakan alat bantu workshop, dan lintasan overhead crane di atas.",
   rekomendasiArea360: "Tetap waspada dan jangan berada di radius ayunan/lintasan overhead crane (DILARANG berdiri di bawah beban menggantung / suspended load). Lakukan kontak visual/komunikasi 2 arah dengan operator alat bantu dan pekerja sekitar. Hindari menatap percikan api las dan pasang barrier/welding screen jika diperlukan.",
-  hasilEnergiBerbahaya: "Terdapat sumber kelistrikan DC unit, risiko short circuit, serta potensi energi gerak mekanikal/hidrolik unit yang sedang diservis mekanik.",
-  rekomendasiEnergiBerbahaya: "Isolation Officer wajib melakukan Isolasi & Lock Out (IK-HSE-08-04). Setiap teknisi wajib memasang Padlock dan Personal Danger Tag milik masing-masing. Dilarang melepas padlock milik orang lain.",
+  hasilEnergiBerbahaya: `1. Kelistrikan Unit:
+   • Terdapat sumber kelistrikan DC unit serta risiko arus pendek / short circuit.
+2. Energi Mekanikal, Hidrolik & Akses Naik/Turun Unit:
+   • Potensi bahaya pelepasan energi gerak mekanikal dan tekanan sisa hidrolik pada unit yang sedang diservis mekanik.
+   • Bahaya terpeleset atau terjatuh saat naik/turun tangga akses akibat kondisi pijakan/handrail licin (ceceran oli, grease, atau lumpur) serta risiko kehilangan keseimbangan akibat membawa peralatan/material yang banyak.
+3. Bahaya Biologis (Hewan Liar & Hama):
+   • Potensi bahaya biologis dari hewan liar atau serangga berbisa (seperti ular, lebah/tawon, kalajengking, kelabang, atau tikus) yang bersarang atau singgah pada kompartemen, celah sasis, tangga, dan engine bay, terutama pada unit yang sudah lama standby / breakdown tanpa beroperasi.`,
+  rekomendasiEnergiBerbahaya: `1. Prosedur Isolasi & Lock Out (LOTO):
+   • Isolation Officer wajib melakukan Isolasi & Lock Out sesuai prosedur (IK-HSE-08-04) sebelum intervensi dimulai.
+   • Setiap teknisi wajib memasang Padlock dan Personal Danger Tag milik masing-masing pada hasp/lockbox (Dilarang keras melepas padlock milik orang lain).
+   • Lakukan verifikasi zero energy state (kelistrikan DC dan residual pressure hidrolik/mekanikal).
+2. Mitigasi Energi Mekanikal & Akses Naik/Turun Unit:
+   • Periksa kondisi tangga dan handrail dari ceceran oli, grease, lumpur, atau air yang licin sebelum dipijak.
+   • Wajib menerapkan metode 3 titik tumpu (Three-point contact) saat naik dan turun tangga unit dengan posisi badan selalu menghadap ke unit.
+   • Dilarang membawa material/tools secara berlebihan dengan kedua tangan; gunakan tas tools (tool backpack / sling bag) yang sesuai agar kedua tangan bebas bergerak.
+   • Lakukan pengangkatan material secara estafet atau menggunakan tali pengangkat (lifting rope) jika membawa part/tools berukuran besar atau berat.
+3. Penanganan Bahaya Biologis (Hewan Liar / Satwa Berbisa):
+   • Lakukan inspeksi visual menggunakan alat penerangan (senter) pada celah sasis, tangga, kabin, dan engine bay sebelum memulai intervensi; hindari merogoh area buta (blind spot).
+   • Apabila menemukan hewan liar, satwa berbisa (ular/kalajengking), atau sarang serangga berbahaya: SEGERA HENTIKAN PEKERJAAN (Stop Work Authority).
+   • Laporkan segera temuan tersebut kepada Pengawas Area atau tim Emergency / Snake Handler untuk penanganan aman.
+   • Lakukan demarkasi area (safety cone / barikade) jika dinilai masih aman untuk mengisolasi area bahaya agar rekan kerja lain tidak mendekat.`,
   hasilPj: "Pengawas workshop dan penanggung jawab unit telah dilapori serta pekerjaan telah diizinkan.",
   rekomendasiPj: "Dapatkan izin kerja resmi dari pengawas workshop. Jika menemukan kondisi tidak aman, hentikan pekerjaan (Stop Work Authority) dan lapor ke pengawas. Setelah selesai, informasikan ke pengawas workshop dan lengkapi Worksheet (FM-OPS-01-05).",
   langkahKerja: `1. Supervisi / Helpdesk memberi tugas / job order untuk PM unit Heavy Equipment.
@@ -386,7 +419,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v6',
+      name: 'sop-templates-storage-v10',
     }
   )
 );
