@@ -347,8 +347,23 @@ const defaultSopTemplateTower: SopTemplate = {
   rekomendasiArea: "Pastikan area kerja di bawah tower diamankan, gunakan barikade jika perlu untuk membatasi area dari orang yang tidak berkepentingan.",
   hasilPemeriksaanArea360: "Kondisi sekeliling tower aman dari rintangan dan bebas dari potensi bahaya di area dasar.",
   rekomendasiArea360: "Pastikan tidak ada pekerja lain yang berada tepat di bawah area pemanjatan untuk menghindari bahaya kejatuhan benda/peralatan (dropped objects).",
-  hasilEnergiBerbahaya: "Potensi energi berbahaya dari radiasi antena RF atau kelistrikan peralatan.",
-  rekomendasiEnergiBerbahaya: "Pastikan peralatan yang akan didismantel sudah tidak bertegangan (LOTO jika diperlukan). Hindari area paparan radiasi tinggi.",
+  hasilEnergiBerbahaya: `1. Radiasi Antena RF & Kelistrikan Peralatan:
+   • Potensi energi berbahaya dari paparan radiasi frekuensi radio (RF) antena aktif serta kelistrikan peralatan/panel telekomunikasi.
+2. Energi Gravitasi (Ketinggian & Dropped Objects):
+   • Potensi bahaya terjatuh dari ketinggian saat pemanjatan/bekerja di tower serta kejatuhan material/peralatan kerja ke area bawah.
+3. Bahaya Biologis (Sarang Serangga & Hewan Liar):
+   • Potensi keberadaan sarang lebah/tawon, burung liar, atau kelelawar pada struktur rangka tower, tangga pemanjatan, dan braket/box antena.
+   • Potensi hewan liar/berbisa (ular, kalajengking, kelabang, tikus) serta semak/tanaman berduri di area dasar, pagar, shelter, dan jalur kabel pondasi tower.`,
+  rekomendasiEnergiBerbahaya: `1. Prosedur Isolasi (LOTO) & Proteksi Radiasi RF:
+   • Pastikan peralatan yang akan didismantel atau dikerjakan sudah tidak bertegangan (terapkan LOTO jika diperlukan).
+   • Hindari berada langsung di depan pancaran utama antena aktif / area paparan radiasi RF tinggi.
+2. Mitigasi Ketinggian & Penanganan Material:
+   • Gunakan Full Body Harness dengan Twin Lanyard standar WAH, terapkan 3 titik tumpu, serta gunakan tali pengangkat dan katrol pada anchor point untuk material/tools.
+3. Penanganan Bahaya Biologis (Hewan Liar / Sarang Serangga):
+   • Lakukan inspeksi visual menyeluruh dari bawah ke struktur tower serta gunakan senter saat memeriksa shelter, box panel, dan area pondasi/semak sebelum memulai pekerjaan; dilarang merogoh area buta (blind spot).
+   • Apabila ditemukan sarang lebah/tawon di jalur pemanjatan, ular, atau hewan berbisa lainnya: SEGERA HENTIKAN PEKERJAAN (Stop Work Authority) dan tunda pemanjatan.
+   • Laporkan segera temuan kepada Pengawas Area dan tim Emergency / Rescue / Snake Handler untuk penanganan aman.
+   • Lakukan demarkasi area (safety cone / barikade) di sekitar dasar tower jika dinilai masih aman untuk mengisolasi area bahaya dari pekerja lain.`,
   hasilPj: "Penanggung jawab area dan Team Rescue telah dilapori dan disetujui.",
   rekomendasiPj: "Wajib lapor kepada pejabat berwenang setempat dan Team rescue sebelum melakukan pemanjatan, dan laporkan kembali setelah pekerjaan selesai.",
   langkahKerja: `1. Persiapkan tools yang sesuai dengan pekerjaan.
@@ -371,13 +386,15 @@ const defaultSopTemplateTower: SopTemplate = {
   potensiBahaya: `- Terjatuh dari ketinggian saat memanjat atau bekerja di tower.
 - Kejatuhan material / tools dari atas tower (Dropped Object).
 - Terjepit saat memasang katrol, menarik tali, atau mengencangkan baut.
-- Tersengat listrik atau terpapar radiasi RF dari peralatan telekomunikasi.`,
+- Tersengat listrik atau terpapar radiasi RF dari peralatan telekomunikasi.
+- Bahaya biologis: sengatan sarang lebah/tawon atau gangguan satwa liar (burung/kelelawar) di struktur tower yang dapat memicu panik/jatuh, serta gigitan ular/kalajengking/serangga berbisa di semak, shelter, dan area dasar tower.`,
   kontrolResiko: `- Gunakan Fullbody Harness dengan Twin lanyard, Helm bertali, Sarung tangan, Safety Shoes (Standar WAH for Worker).
 - Selalu terapkan teknik pemanjatan 3 titik tumpu (Three-point contact).
 - Gunakan tali pengangkat dan katrol yang diikat kuat pada anchor point untuk menaikkan/menurunkan material.
 - Pastikan area bawah tower dibarikade/dikosongkan untuk mencegah pekerja lain terkena jatuhan material.
 - Perhatikan titik jepit tangan/jari saat memasang peralatan.
-- Lakukan Analisa keselamatan kerja (JSA) dan buat rencana keadaan darurat sebelum bekerja.`,
+- Lakukan Analisa keselamatan kerja (JSA) dan buat rencana keadaan darurat sebelum bekerja.
+- Lakukan inspeksi visual struktur tower dan area dasar/shelter (gunakan senter, hindari blind spot) sebelum memanjat; apabila ditemukan sarang tawon/lebah atau hewan liar/berbisa, segera Stop Pekerjaan (SWA), lakukan demarkasi area jika aman, dan lapor Pengawas / Team Rescue / Snake Handler.`,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
@@ -510,7 +527,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v11',
+      name: 'sop-templates-storage-v12',
     }
   )
 );
