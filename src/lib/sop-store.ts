@@ -33,16 +33,90 @@ interface SopStore {
   deleteTemplate: (id: string) => void;
 }
 
-const defaultSopTemplate: SopTemplate = {
-  id: "default-1",
+const hasilBahayaBiologisPit = `3. Bahaya Biologis (Hewan Liar & Serangga Berbisa):
+   • Potensi bahaya biologis dari hewan liar atau serangga berbisa (seperti ular, lebah/tawon, kalajengking, kelabang, atau tikus) yang bersarang atau singgah pada kompartemen kabin, celah sasis, tangga, dan engine bay, terutama pada unit yang lama standby/breakdown atau terparkir di area terbuka/pit.`;
+
+const rekomendasiBahayaBiologisPit = `3. Penanganan Bahaya Biologis (Hewan Liar / Satwa Berbisa):
+   • Lakukan inspeksi visual menggunakan alat penerangan (senter) pada celah sasis, tangga, kabin, dan engine bay sebelum memulai pekerjaan; dilarang merogoh area buta (blind spot).
+   • Apabila menemukan hewan liar, satwa berbisa (ular/kalajengking), atau sarang serangga berbahaya: SEGERA HENTIKAN PEKERJAAN (Stop Work Authority).
+   • Laporkan segera temuan tersebut kepada Pengawas Area atau tim Emergency / Snake Handler untuk penanganan aman.
+   • Lakukan demarkasi area (safety cone / barikade) jika dinilai masih aman untuk mengisolasi area bahaya agar rekan kerja lain tidak mendekat.`;
+
+function getTruckAreaObservation(unitName: string) {
+  return {
+    hasilPemeriksaanArea: `Area parkir Light Vehicle (LV) dan bay unit ${unitName} berada di area Shift Change. Unit dalam kondisi mati, permukaan rata dan stabil, serta tersedia fasilitas area parkir aman (Lighting Plant dan Windrow/tanggul pembatas).`,
+    rekomendasiArea: `1. Area Parkir Aman (LV & Unit):
+   • Parkir kendaraan LV hanya di tempat yang telah disediakan dengan fasilitas Lighting Plant dan Windrow/tanggul pembatas.
+   • Pastikan lokasi parkir berada lebih dari 1.5x ketinggian dinding galian aktif (highwall/lereng).
+   • Pastikan lokasi parkir rata, stabil, tidak berada di jalur aliran air, dan tidak berada di permukaan tanah yang lembek/amblas.
+2. Koordinasi & Kondisi Unit:
+   • Lakukan komunikasi positif dan melapor kepada pengawas area sebelum memasuki bay Shift Change.
+   • Pastikan unit dalam kondisi mati, rem parkir/wheel chock terpasang, operator sudah keluar dari kabin, dan aman dari lalu lintas alat berat lain.`,
+    hasilPemeriksaanArea360: `1. Aktivitas Area Shift Change (360°):
+   • Unit diparkir di area Shift Change yang memiliki aktivitas keluar/masuk bay Shift Change untuk pergantian operator.
+   • Terdapat aktivitas perawatan jalan oleh alat support (Small Digger, Grader, dan Dozer) yang beroperasi di sekitar area Shift Change.
+2. Kondisi Sekeliling Unit:
+   • Area radius 360 derajat di sekitar unit diperiksa bebas dari rintangan dan pekerja lain yang tidak berkepentingan.`,
+    rekomendasiArea360: `1. Kewaspadaan & Kontak Positif di Area Shift Change:
+   • Tetap waspada terhadap lalu lintas unit keluar/masuk bay Shift Change serta pergerakan alat perawatan jalan (Small Digger, Grader, dan Dozer).
+   • Wajib lakukan kontak positif (radio/visual) saat berpindah area dan selama perjalanan memarkir kendaraan LV keluar atau masuk ke area bay untuk menurunkan/menaikkan material.
+2. Pengamanan Area Kerja:
+   • Pasang barikade atau safety cone di sekitar area kerja/unit untuk membatasi akses dan memberi tanda kepada lalu lintas unit lain.`,
+  };
+}
+
+function getNonTruckAreaObservation(unitName: string) {
+  return {
+    hasilPemeriksaanArea: `Unit ${unitName} berada di area kerja pit (Loading Point aktif / Dumping aktif) dalam kondisi mati, attachment (blade/bucket/ripper) sudah diturunkan ke tanah, dan tersedia titik parkir LV yang aman (Lighting Plant dan Windrow/tanggul pembatas).`,
+    rekomendasiArea: `1. Komunikasi Positif & Izin Masuk Area Aktif:
+   • Wajib melakukan komunikasi positif dengan Pengawas area dan kontak positif dengan Operator unit sebelum memasuki area Loading Point aktif atau Dumping aktif.
+   • Pastikan unit dalam kondisi mati, attachment (blade/bucket/ripper) diturunkan ke tanah, dan operator sudah keluar dari kabin sebelum bekerja.
+2. Penempatan Parkir Aman di Area Aktif:
+   • Parkir kendaraan LV pada tempat aman yang disediakan di dalam area aktivitas loading/dumping dengan fasilitas Lighting Plant dan Windrow/tanggul pembatas.
+   • Pastikan lokasi parkir berada lebih dari 1.5x ketinggian dinding galian aktif (highwall/lereng).
+   • Pastikan permukaan tempat parkir rata, stabil, tidak berada di jalur aliran air, dan tidak berada di permukaan tanah yang lembek/amblas.`,
+    hasilPemeriksaanArea360: `1. Aktivitas Loading Point Aktif / Dumping Aktif (360°):
+   • Area kerja dan parkir berada di dalam area Loading Point aktif atau Dumping aktif dengan lalu lintas alat berat yang beroperasi di sekitarnya.
+   • Terdapat potensi paparan debu tebal dari aktivitas loading, dumping, maupun pergerakan alat berat sekitar.
+2. Kondisi Sekeliling Unit:
+   • Kondisi sekeliling unit (360 derajat) diperiksa dari rintangan, blind spot alat berat sekitar, serta potensi longsoran dinding galian.`,
+    rekomendasiArea360: `1. Kewaspadaan & Kontak Positif di Area Aktif:
+   • Wajib lakukan komunikasi positif dengan Pengawas dan kontak positif dengan Operator sebelum memasuki, berpindah, maupun keluar dari area Loading Point aktif / Dumping aktif.
+   • Tetap waspada penuh selama berada di dalam area aktivitas loading dan dumping; jaga jarak aman dari radius manuver/swing alat berat sekitar.
+   • Pasang barikade atau safety cone di sekitar unit bila diperlukan untuk menandai area kerja.
+2. Pengendalian Paparan Debu:
+   • Wajib menggunakan masker debu (sesuai standar) apabila kondisi area berdebu tebal serta kacamata safety.`,
+  };
+}
+
+const truckPotensiBahayaExtra = `- Tertabrak/terserempet pergerakan unit keluar/masuk bay Shift Change atau alat perawatan jalan (Small Digger, Grader, Dozer).
+- Bahaya biologis: gigitan atau sengatan hewan liar/berbisa (ular, tawon/lebah, kalajengking, kelabang, tikus) yang bersarang di celah sasis, tangga, kabin, atau engine bay.`;
+
+const truckKontrolResikoExtra = `- Parkir LV di tempat ber-windrow & lighting plant (>1.5x tinggi dinding galian aktif, bukan jalur air/permukaan lembek); gunakan tas tools/estafet saat naik/turun unit.
+- Lakukan kontak positif saat berpindah area dan memarkir kendaraan keluar/masuk bay Shift Change, serta waspadai alat perawatan jalan (Small Digger, Grader, Dozer).
+- Lakukan inspeksi visual dengan senter sebelum menyentuh celah unit (hindari blind spot); bila menemukan hewan liar/berbisa segera Stop Pekerjaan (SWA), demarkasi area jika aman, dan lapor Pengawas / Snake Handler.`;
+
+const nonTruckPotensiBahayaExtra = `- Tertabrak/terserempet alat berat di area Loading Point aktif / Dumping aktif serta paparan debu tebal.
+- Bahaya biologis: gigitan atau sengatan hewan liar/berbisa (ular, tawon/lebah, kalajengking, kelabang, tikus) yang bersarang di celah sasis, tangga, kabin, atau engine bay.`;
+
+const nonTruckKontrolResikoExtra = `- Parkir LV di tempat ber-windrow & lighting plant (>1.5x tinggi dinding galian aktif, bukan jalur air/permukaan lembek); gunakan tas tools/estafet saat naik/turun unit.
+- Wajib komunikasi positif dengan Pengawas & kontak positif dengan Operator sebelum masuk area Loading/Dumping aktif; gunakan masker debu jika debu tebal.
+- Lakukan inspeksi visual dengan senter sebelum menyentuh celah unit (hindari blind spot); bila menemukan hewan liar/berbisa segera Stop Pekerjaan (SWA), demarkasi area jika aman, dan lapor Pengawas / Snake Handler.`;
+
+const baseRadioFM: Omit<SopTemplate, 'id' | 'jenisUnit' | 'hasilPemeriksaanArea' | 'rekomendasiArea' | 'hasilPemeriksaanArea360' | 'rekomendasiArea360' | 'potensiBahaya' | 'kontrolResiko'> = {
   typePekerjaan: "Instalasi / Remove Radio FM",
-  jenisUnit: "Dozer",
-  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Dozer dalam kondisi mati dan aman untuk dikerjakan.",
-  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, stabil, dan aman dari lalu lintas pergerakan alat berat lain.",
-  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) bebas dari rintangan dan pekerja lain yang tidak berkepentingan.",
-  rekomendasiArea360: "Pasang barikade atau safety cone jika diperlukan untuk membatasi area kerja di sekitar unit.",
-  hasilEnergiBerbahaya: "Terdapat sumber tegangan listrik 12 VDC dari converter/electrician unit.",
-  rekomendasiEnergiBerbahaya: "Lakukan prosedur Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag. Gunakan fuse blade 10A dan conduit untuk melindungi kabel power.",
+  hasilEnergiBerbahaya: `1. Kelistrikan Unit:
+   • Terdapat sumber tegangan listrik 12 VDC dari converter/electrician unit serta risiko arus pendek / short circuit.
+2. Energi Mekanikal, Hidrolik & Akses Naik/Turun Unit:
+   • Potensi pergerakan unit tak terduga apabila isolasi tidak dilakukan serta bahaya terpeleset/terjatuh saat naik/turun tangga akses yang licin (lumpur/oli/grease) atau membawa peralatan berlebih.
+${hasilBahayaBiologisPit}`,
+  rekomendasiEnergiBerbahaya: `1. Prosedur Isolasi & Lock Out (LOTO):
+   • Lakukan prosedur Isolasi & Lock Out (IK-HSE-08-04). Pasang Padlock dan Personal Danger Tag milik masing-masing.
+   • Gunakan fuse blade 10A dan conduit untuk melindungi kabel power 12 VDC dari korsleting.
+2. Mitigasi Energi Mekanikal & Akses Naik/Turun Unit:
+   • Periksa tangga dan handrail dari ceceran lumpur/oli/grease; terapkan 3 titik tumpu (Three-point contact) saat naik/turun unit.
+   • Gunakan tas tools yang sesuai agar tangan bebas dan lakukan pengangkatan estafet/tali untuk material berat.
+${rekomendasiBahayaBiologisPit}`,
   hasilPj: "Penanggung jawab area telah dilapori dan siap memberikan izin kerja.",
   rekomendasiPj: "Lakukan eskalasi dan serahkan Worksheet yang telah diisi kepada pengawas dan Helpdesk MKN setelah pekerjaan instalasi selesai.",
   langkahKerja: `1. Persiapkan tools dan order material ke Warehouse.
@@ -59,72 +133,57 @@ const defaultSopTemplate: SopTemplate = {
 12. Nyalakan Radio FM, scan frekuensi / gunakan flashdisk untuk pengetesan.
 13. Jika normal, pasang Radio FM di braket secara permanen.
 14. Bersihkan area kerja, turun dengan 3 titik tumpu, lepas Padlock & Tag.`,
-  potensiBahaya: `- Terjatuh dari alat berat (saat naik/turun unit atau bekerja di ketinggian kabin).
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
+const baseRadioFMPotensiBahaya = `- Terjatuh dari alat berat (saat naik/turun unit atau bekerja di ketinggian kabin).
 - Tergores benda tajam (cutter saat memotong kabel).
 - Terjepit (saat melakukan crimping connector).
 - Tersengat listrik (saat menghubungkan power supply 12 VDC).
-- Unit bergerak tiba-tiba jika tidak terisolasi dengan benar.`,
-  kontrolResiko: `- Gunakan 3 titik tumpu (Three-point contact) saat naik/turun unit.
+- Unit bergerak tiba-tiba jika tidak terisolasi dengan benar.`;
+
+const baseRadioFMKontrolResiko = `- Gunakan 3 titik tumpu (Three-point contact) saat naik/turun unit.
 - Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
 - Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
 - Hindari sisi tajam cutter dan perhatikan titik jepit saat crimping connector.
 - Selalu patuhi prosedur LOTO (Lock Out Tag Out) sebelum memulai intervensi elektrik.
-- Wajib menggunakan APD standar (seragam, sepatu safety, helmet, kacamata).`,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+- Wajib menggunakan APD standar (seragam, sepatu safety, helmet, kacamata).`;
+
+const defaultSopTemplate: SopTemplate = {
+  ...baseRadioFM,
+  ...getNonTruckAreaObservation("Dozer"),
+  id: "default-1",
+  jenisUnit: "Dozer",
+  potensiBahaya: `${baseRadioFMPotensiBahaya}\n${nonTruckPotensiBahayaExtra}`,
+  kontrolResiko: `${baseRadioFMKontrolResiko}\n${nonTruckKontrolResikoExtra}`,
 };
 
 const defaultSopTemplateHaulTruck: SopTemplate = {
+  ...baseRadioFM,
+  ...getTruckAreaObservation("Haul Truck"),
   id: "default-2",
-  typePekerjaan: "Instalasi / Remove Radio FM",
   jenisUnit: "Haul Truck",
-  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Haul Truck dalam kondisi mati dan aman untuk dikerjakan.",
-  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, stabil, dan aman dari lalu lintas pergerakan alat berat lain.",
-  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) bebas dari rintangan dan pekerja lain yang tidak berkepentingan.",
-  rekomendasiArea360: "Pasang barikade atau safety cone jika diperlukan untuk membatasi area kerja di sekitar unit.",
-  hasilEnergiBerbahaya: "Terdapat sumber tegangan listrik 12 VDC dari converter/electrician unit.",
-  rekomendasiEnergiBerbahaya: "Lakukan prosedur Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag. Gunakan fuse blade 10A dan conduit untuk melindungi kabel power.",
-  hasilPj: "Penanggung jawab area telah dilapori dan siap memberikan izin kerja.",
-  rekomendasiPj: "Lakukan eskalasi dan serahkan Worksheet yang telah diisi kepada pengawas dan Helpdesk MKN setelah pekerjaan instalasi selesai.",
-  langkahKerja: `1. Persiapkan tools dan order material ke Warehouse.
-2. Datang ke lokasi/workshop dan parkir di area khusus Light Vehicle.
-3. Melapor kepada penanggung jawab area.
-4. Lakukan Isolasi & Lock Out (IK-HSE-08-04) dan pasang Padlock.
-5. Naikkan material ke unit dengan 3 titik tumpu.
-6. Lakukan observasi dalam kabin untuk menentukan posisi Radio FM, speaker, dan antenna.
-7. Pasang braket antenna, antenna, lalu masukkan kabel ke kabin.
-8. Pasang konektor auto plug di ujung kabel antenna.
-9. Hubungkan sumber tegangan 12 VDC ke soket power radio FM.
-10. Pasang fuse holder (blade 10A) di dekat sumber tegangan dan lindungi dengan conduit.
-11. Pasang braket speaker, hubungkan kabel speaker ke soket.
-12. Nyalakan Radio FM, scan frekuensi / gunakan flashdisk untuk pengetesan.
-13. Jika normal, pasang Radio FM di braket secara permanen.
-14. Bersihkan area kerja, turun dengan 3 titik tumpu, lepas Padlock & Tag.`,
-  potensiBahaya: `- Terjatuh dari alat berat (saat naik/turun unit atau bekerja di ketinggian kabin).
-- Tergores benda tajam (cutter saat memotong kabel).
-- Terjepit (saat melakukan crimping connector).
-- Tersengat listrik (saat menghubungkan power supply 12 VDC).
-- Unit bergerak tiba-tiba jika tidak terisolasi dengan benar.`,
-  kontrolResiko: `- Gunakan 3 titik tumpu (Three-point contact) saat naik/turun unit.
-- Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
-- Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
-- Hindari sisi tajam cutter dan perhatikan titik jepit saat crimping connector.
-- Selalu patuhi prosedur LOTO (Lock Out Tag Out) sebelum memulai intervensi elektrik.
-- Wajib menggunakan APD standar (seragam, sepatu safety, helmet, kacamata).`,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  potensiBahaya: `${baseRadioFMPotensiBahaya}\n${truckPotensiBahayaExtra}`,
+  kontrolResiko: `${baseRadioFMKontrolResiko}\n${truckKontrolResikoExtra}`,
 };
 
 const defaultSopTemplateDispatchElectric: SopTemplate = {
+  ...getTruckAreaObservation("Electric Truck"),
   id: "default-3",
   typePekerjaan: "Perbaikan Dispatch type PTX",
   jenisUnit: "Electric Truck",
-  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Electric Truck dalam kondisi mati dan aman untuk dikerjakan.",
-  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, stabil, dan aman dari lalu lintas pergerakan alat berat lain.",
-  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) bebas dari rintangan dan pekerja lain yang tidak berkepentingan.",
-  rekomendasiArea360: "Pasang barikade atau safety cone jika diperlukan untuk membatasi area kerja di sekitar unit.",
-  hasilEnergiBerbahaya: "Terdapat kelistrikan DC pada komponen Dispatch (Goic, Mikrotik, Antenna GPS).",
-  rekomendasiEnergiBerbahaya: "Lakukan prosedur Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag sebelum melakukan pengecekan hardware/kabel.",
+  hasilEnergiBerbahaya: `1. Kelistrikan Unit & Perangkat Dispatch:
+   • Terdapat kelistrikan DC pada komponen Dispatch (Goic, Mikrotik, Antenna GPS 3.2V–5V) serta risiko short circuit.
+2. Energi Mekanikal, Hidrolik & Akses Naik/Turun Unit:
+   • Potensi pergerakan unit tak terduga bila isolasi diabaikan serta bahaya terpeleset/terjatuh saat naik/turun tangga akses yang licin (lumpur/oli/grease) atau membawa peralatan berlebih.
+${hasilBahayaBiologisPit}`,
+  rekomendasiEnergiBerbahaya: `1. Prosedur Isolasi & Lock Out (LOTO):
+   • Lakukan prosedur Isolasi & Lock Out (IK-HSE-08-04). Pasang Padlock dan Personal Danger Tag sebelum melakukan pengecekan hardware/kabel.
+2. Mitigasi Energi Mekanikal & Akses Naik/Turun Unit:
+   • Periksa tangga dan handrail dari lumpur/oli/grease; wajib terapkan 3 titik tumpu (Three-point contact) saat naik/turun unit.
+   • Gunakan tas tools yang sesuai dan metode estafet/tali saat membawa part atau peralatan.
+${rekomendasiBahayaBiologisPit}`,
   hasilPj: "Penanggung jawab area telah dilapori dan mengizinkan perbaikan.",
   rekomendasiPj: "Lakukan eskalasi dan serahkan Worksheet yang telah diisi kepada pengawas dan Helpdesk MKN setelah pekerjaan selesai.",
   langkahKerja: `1. Mempersiapkan Tools dan datang ke lokasi parkir unit (area Light Vehicle).
@@ -146,32 +205,39 @@ const defaultSopTemplateDispatchElectric: SopTemplate = {
   potensiBahaya: `- Terjatuh dari alat berat (saat naik/turun unit).
 - Tersengat listrik (saat mengecek tegangan inner/ground GPS, power Mikrotik, atau Goic).
 - Tergores benda tajam / Terjepit (saat memasang connector menggunakan cutter atau crimping tool).
-- Unit bergerak tiba-tiba jika prosedur Isolasi/LOTO tidak dipatuhi.`,
+- Unit bergerak tiba-tiba jika prosedur Isolasi/LOTO tidak dipatuhi.
+${truckPotensiBahayaExtra}`,
   kontrolResiko: `- Gunakan tiga (3) titik tumpu saat naik/turun unit.
 - Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
 - Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
 - Hindari titik jepit dan bagian tajam saat menggunakan cutter, crimping tool, tang potong, dan tang lancip.
 - Wajib melakukan Isolasi & Lock Out (Padlock & Personal Danger Tag) sebelum bekerja.
-- Wajib menggunakan APD lengkap (seragam, sepatu safety, helmet, kacamata).`,
+- Wajib menggunakan APD lengkap (seragam, sepatu safety, helmet, kacamata).
+${truckKontrolResikoExtra}`,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
 
 const defaultSopTemplateDispatchHaul: SopTemplate = {
   ...defaultSopTemplateDispatchElectric,
+  ...getTruckAreaObservation("Haul Truck"),
   id: "default-4",
   jenisUnit: "Haul Truck",
-  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit Haul Truck dalam kondisi mati dan aman untuk dikerjakan.",
 };
 
-const baseRadioKomunikasi: Omit<SopTemplate, 'id' | 'jenisUnit'> = {
+const baseRadioKomunikasi: Omit<SopTemplate, 'id' | 'jenisUnit' | 'hasilPemeriksaanArea' | 'rekomendasiArea' | 'hasilPemeriksaanArea360' | 'rekomendasiArea360' | 'potensiBahaya' | 'kontrolResiko'> = {
   typePekerjaan: "Perbaikan Radio Komunikasi",
-  hasilPemeriksaanArea: "Area parkir Light Vehicle aman, unit dalam kondisi mati dan peralatan kerja (bucket/blade) sudah diturunkan ke tanah.",
-  rekomendasiArea: "Pastikan unit diparkir di tempat yang rata, aman dari lalu lintas alat berat. Pastikan operator sudah keluar dari kabin.",
-  hasilPemeriksaanArea360: "Kondisi sekeliling unit (360 derajat) aman dan bebas dari alat berat lain yang beroperasi.",
-  rekomendasiArea360: "Pasang barikade/safety cone jika area kerja berpotensi dilalui alat berat lain.",
-  hasilEnergiBerbahaya: "Terdapat kelistrikan DC (12V - 24V) pada power converter dan radio.",
-  rekomendasiEnergiBerbahaya: "Wajib melakukan Isolasi & Lock Out (LOTO). Pasang Padlock dan Personal Danger Tag sebelum bekerja pada kelistrikan.",
+  hasilEnergiBerbahaya: `1. Kelistrikan Unit & Perangkat Radio:
+   • Terdapat kelistrikan DC (12V – 24V) pada power converter dan radio serta risiko korsleting / short circuit.
+2. Energi Mekanikal, Hidrolik & Akses Naik/Turun Unit:
+   • Potensi energi gerak mekanikal/hidrolik (termasuk risiko terjepit area dump body pada Haul Truck/ADT) serta bahaya terpeleset/terjatuh saat naik/turun tangga licin atau membawa material berlebih.
+${hasilBahayaBiologisPit}`,
+  rekomendasiEnergiBerbahaya: `1. Prosedur Isolasi & Lock Out (LOTO):
+   • Wajib melakukan Isolasi & Lock Out (IK-HSE-08-04). Pasang Padlock dan Personal Danger Tag sebelum bekerja pada kelistrikan.
+2. Mitigasi Energi Mekanikal & Akses Naik/Turun Unit:
+   • Khusus Haul Truck/Dump Truck: WAJIB pasang PIN LOCK jika dump body dinaikkan untuk pengecekan converter di belakang kabin.
+   • Periksa kondisi tangga/handrail dari lumpur/oli/grease; terapkan 3 titik tumpu (Three-point contact), gunakan tas tools yang sesuai, dan angkat material berat secara estafet/tali.
+${rekomendasiBahayaBiologisPit}`,
   hasilPj: "Penanggung jawab area telah dilapori dan pekerjaan diizinkan.",
   rekomendasiPj: "Lapor ke pengawas atau Oscar base dan Helpdesk setelah pekerjaan selesai, lalu serahkan Worksheet.",
   langkahKerja: `1. Mempersiapkan tools dan datang ke lokasi unit.
@@ -189,64 +255,89 @@ const baseRadioKomunikasi: Omit<SopTemplate, 'id' | 'jenisUnit'> = {
 10. Lepas Padlock dan Personal Danger Tag.
 11. Lapor ke pengawas/Oscar base dan Helpdesk MKN.
 12. Lengkapi dan serahkan Worksheet.`,
-  potensiBahaya: `- Terjatuh dari alat berat (ketinggian di atas kabin atau saat naik/turun).
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
+const baseRadioKomunikasiPotensiBahaya = `- Terjatuh dari alat berat (ketinggian di atas kabin atau saat naik/turun).
 - Tergores/Terpotong (benda tajam, cutter).
 - Terjepit (saat crimping connector atau area dump body pada Haul Truck).
-- Tersengat arus pendek kelistrikan unit (12V/24V).`,
-  kontrolResiko: `- Wajib menggunakan metode 3 titik tumpu saat naik/turun unit.
+- Tersengat arus pendek kelistrikan unit (12V/24V).`;
+
+const baseRadioKomunikasiKontrolResiko = `- Wajib menggunakan metode 3 titik tumpu saat naik/turun unit.
 - Bekerja di ketinggian <5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard TANPA absorber.
 - Bekerja di ketinggian >5 meter tanpa platform: gunakan Full Body Harness dengan single lanyard DAN absorber.
 - Hindari sisi tajam saat memakai cutter; perhatikan titik jepit saat menggunakan tang/crimping.
 - WAJIB pasang PIN LOCK jika berada di bawah dump body Haul Truck yang sedang diangkat.
 - Lakukan prosedur LOTO secara disiplin.
-- Gunakan APD lengkap (Helmet, kacamata, safety shoes, seragam).`,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+- Gunakan APD lengkap (Helmet, kacamata, safety shoes, seragam).`;
 
-const defaultSopTemplateRadioShovel: SopTemplate = {
-  ...baseRadioKomunikasi,
-  id: "default-5",
-  jenisUnit: "Shovel / Big Digger",
-};
+function createRadioTemplate(
+  id: string,
+  jenisUnit: string,
+  isTruck: boolean,
+  typePekerjaan = "Perbaikan Radio Komunikasi"
+): SopTemplate {
+  const areaObs = isTruck
+    ? getTruckAreaObservation(jenisUnit)
+    : getNonTruckAreaObservation(jenisUnit);
+  const potensiExtra = isTruck ? truckPotensiBahayaExtra : nonTruckPotensiBahayaExtra;
+  const kontrolExtra = isTruck ? truckKontrolResikoExtra : nonTruckKontrolResikoExtra;
 
-const defaultSopTemplateRadioHaulTruck: SopTemplate = {
-  ...baseRadioKomunikasi,
-  id: "default-6",
-  jenisUnit: "Haul Truck",
-};
+  return {
+    ...baseRadioKomunikasi,
+    ...areaObs,
+    id,
+    typePekerjaan,
+    jenisUnit,
+    potensiBahaya: `${baseRadioKomunikasiPotensiBahaya}\n${potensiExtra}`,
+    kontrolResiko: `${baseRadioKomunikasiKontrolResiko}\n${kontrolExtra}`,
+  };
+}
 
-const defaultSopTemplateRadioDozer: SopTemplate = {
-  ...baseRadioKomunikasi,
-  id: "default-7",
-  jenisUnit: "Dozer",
-};
+const defaultSopTemplateRadioShovel: SopTemplate = createRadioTemplate(
+  "default-5",
+  "Shovel / Big Digger",
+  false
+);
 
-const defaultSopTemplateRadioBackhoe: SopTemplate = {
-  ...baseRadioKomunikasi,
-  id: "default-8",
-  jenisUnit: "Backhoe / Small Digger",
-};
+const defaultSopTemplateRadioHaulTruck: SopTemplate = createRadioTemplate(
+  "default-6",
+  "Haul Truck",
+  true
+);
 
-const defaultSopTemplateRadioArticulated: SopTemplate = {
-  ...baseRadioKomunikasi,
-  id: "default-9",
-  jenisUnit: "Articulated Dump Truck",
-};
+const defaultSopTemplateRadioDozer: SopTemplate = createRadioTemplate(
+  "default-7",
+  "Dozer",
+  false
+);
 
-const defaultSopTemplateRadioFMArticulated: SopTemplate = {
-  ...baseRadioKomunikasi,
-  typePekerjaan: "Perbaikan Radio FM",
-  id: "default-10",
-  jenisUnit: "Articulated Dump Truck",
-};
+const defaultSopTemplateRadioBackhoe: SopTemplate = createRadioTemplate(
+  "default-8",
+  "Backhoe / Small Digger",
+  false
+);
 
-const defaultSopTemplateRadioFMDozer: SopTemplate = {
-  ...baseRadioKomunikasi,
-  typePekerjaan: "Perbaikan Radio FM",
-  id: "default-11",
-  jenisUnit: "Dozer",
-};
+const defaultSopTemplateRadioArticulated: SopTemplate = createRadioTemplate(
+  "default-9",
+  "Articulated Dump Truck",
+  true
+);
+
+const defaultSopTemplateRadioFMArticulated: SopTemplate = createRadioTemplate(
+  "default-10",
+  "Articulated Dump Truck",
+  true,
+  "Perbaikan Radio FM"
+);
+
+const defaultSopTemplateRadioFMDozer: SopTemplate = createRadioTemplate(
+  "default-11",
+  "Dozer",
+  false,
+  "Perbaikan Radio FM"
+);
 
 const defaultSopTemplateTower: SopTemplate = {
   id: "default-12",
@@ -419,7 +510,7 @@ export const useSopStore = create<SopStore>()(
       }))
     }),
     {
-      name: 'sop-templates-storage-v10',
+      name: 'sop-templates-storage-v11',
     }
   )
 );
